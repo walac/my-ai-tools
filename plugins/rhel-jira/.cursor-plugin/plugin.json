@@ -1,0 +1,10 @@
+{
+  "name": "rhel-jira",
+  "version": "1.0.0",
+  "description": "RHEL Kernel JIRA workflow assistant for creating, searching, transitioning, and managing issues across RHEL, RHELTEST, and RHELMISC",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["jira", "rhel", "kernel", "workflow", "issue-tracking"]
+}

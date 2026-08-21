@@ -1,0 +1,10 @@
+{
+  "name": "kernel-tutorial-writer",
+  "version": "1.0.0",
+  "description": "In-depth tutorial-style write-ups of Linux kernel subsystems, grounded in the source tree on disk",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["kernel", "tutorial", "documentation", "linux"]
+}

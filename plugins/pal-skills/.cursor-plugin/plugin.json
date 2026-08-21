@@ -1,0 +1,24 @@
+{
+  "name": "pal-skills",
+  "version": "1.0.0",
+  "description": "Structured analysis skills: architecture analysis, code review, debugging, security audit, refactoring, test generation, and more",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": [
+    "analyze",
+    "codereview",
+    "debug",
+    "thinkdeep",
+    "precommit",
+    "secaudit",
+    "refactor",
+    "testgen",
+    "planner",
+    "consensus",
+    "tracer",
+    "docgen",
+    "challenge"
+  ]
+}

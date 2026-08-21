@@ -1,0 +1,306 @@
+# OS / generic
+.DS_Store
+node_modules/
+*.log
+
+# This marketplace (.cursor-plugin/, plugins/) is tracked on purpose.
+# Do not use a .cursor* glob — it would ignore .cursor-plugin/.
+
+# ---------------------------------------------------------------------------
+# Local indexes, MCP, and agent data stores
+# ---------------------------------------------------------------------------
+.semcode.db/
+.semcode/
+.wtmcp-data/
+.langgraph_api/
+.langchain.db
+.serena/
+.serena_config.yml
+serena_config.yml
+.specstory/
+.mcp.json
+.mcp.local.json
+mcp.local.json
+*.local.json
+*.local.md
+
+# ---------------------------------------------------------------------------
+# Instruction files (any directory)
+# Canonical names plus common case variants.
+# ---------------------------------------------------------------------------
+AGENTS.md
+agents.md
+Agents.md
+AGENT.md
+agent.md
+Agent.md
+AGENTS.override.md
+CLAUDE.md
+Claude.md
+claude.md
+CLAUDE.local.md
+GEMINI.md
+Gemini.md
+gemini.md
+COPILOT.md
+CURSOR.md
+WINDSURF.md
+WARP.md
+CRUSH.md
+QWEN.md
+GOOSE.md
+OPENCODE.md
+AMP.md
+DEVIN.md
+CODEX.md
+GROK.md
+KILO.md
+ROO.md
+CLINE.md
+KIRO.md
+Kiro.md
+JUNIE.md
+TRAE.md
+LINGMA.md
+IFLOW.md
+QODER.md
+AUGMENT.md
+FACTORY.md
+DROID.md
+PEARAI.md
+VOID.md
+REPLIT.md
+TABNINE.md
+CODEIUM.md
+CODY.md
+HERMES.md
+ANTIGRAVITY.md
+PI.md
+JULES.md
+MISTRAL.md
+SOURCERY.md
+AI.md
+.ai.md
+.ai-instructions
+ai-instructions.md
+llms.txt
+LLMs.txt
+llms-full.txt
+copilot-instructions.md
+
+# Root-only skill dump (plugin skills under plugins/*/skills/*/SKILL.md stay tracked)
+/SKILL.md
+
+# ---------------------------------------------------------------------------
+# Anthropic Claude Code / Claude Desktop
+# ---------------------------------------------------------------------------
+.claude/
+.claude.json
+.claude.json.backup
+.claude-flow/
+.swarm/
+claude-flow.config.json
+
+# ---------------------------------------------------------------------------
+# Google Gemini CLI / Gemini Code Assist / Firebase Studio / Jules / IDX
+# ---------------------------------------------------------------------------
+.gemini/
+.geminiignore
+.gemini-clipboard/
+.aiexclude
+.idx/
+.jules/
+.adk/
+.antigravity/
+
+# ---------------------------------------------------------------------------
+# OpenAI Codex / ChatGPT coding agent
+# ---------------------------------------------------------------------------
+.codex/
+.openai/
+
+# ---------------------------------------------------------------------------
+# Cursor IDE project config (not the marketplace format)
+# ---------------------------------------------------------------------------
+.cursor/
+.cursorrules
+.cursorignore
+.cursorindexingignore
+.cursor.json
+.cursor-settings.yaml
+.cursor-chat-history/
+
+# ---------------------------------------------------------------------------
+# GitHub Copilot / VS Code Copilot Chat
+# ---------------------------------------------------------------------------
+.github/copilot-instructions.md
+.github/copilot/
+.github/instructions/
+.github/prompts/
+.github/agents/
+.github/skills/
+.github/chatmodes/
+.github/hooks/
+.copilot/
+.vscode/mcp.json
+.vscode/copilot-instructions.md
+
+# ---------------------------------------------------------------------------
+# Aider
+# ---------------------------------------------------------------------------
+.aider/
+.aider*
+.aiderignore
+.aider.conf.yml
+
+# ---------------------------------------------------------------------------
+# Continue
+# ---------------------------------------------------------------------------
+.continue/
+.continuerc.json
+
+# ---------------------------------------------------------------------------
+# Cline / Roo Code / Kilo Code
+# ---------------------------------------------------------------------------
+.cline/
+.clinerules
+.clinerules/
+cline.json
+.roo/
+.roo-code/
+.rooignore
+.roomodes
+.roorules
+.kilo/
+.kilocode/
+.kilocodemodes
+kilo.jsonc
+kilo.json
+memory-bank/
+
+# ---------------------------------------------------------------------------
+# Windsurf / Codeium / Cascade / Tabnine / Cody / Amazon Q / Qodo
+# ---------------------------------------------------------------------------
+.windsurf/
+.windsurfrules
+.cascade/
+.codeium/
+.cody/
+.tabnine/
+.tabnineignore
+.amazonq/
+.amazon-q/
+.amazon-codewhisperer/
+.qodo/
+.qodoignore
+.codium/
+.sourcegraph/
+.tabby/
+.tabby-client/
+.supermaven/
+.blackbox/
+.deepseek/
+.bito/
+.phind/
+.mistral/
+.zencoder/
+.githubnext/
+
+# ---------------------------------------------------------------------------
+# Amp, Factory Droid, Goose, OpenCode, Crush, Warp, Qwen
+# ---------------------------------------------------------------------------
+.amp/
+.factory/
+.goose/
+.goosehints
+.opencode/
+opencode.json
+opencode.jsonc
+.crush/
+.warp/
+.qwen/
+
+# ---------------------------------------------------------------------------
+# Devin, OpenHands, AutoGPT, GPT Engineer / Pilot, Mentat, Plandex
+# ---------------------------------------------------------------------------
+.devin/
+.openhands/
+.openclaw/
+.autogpt/
+auto-gpt.json
+.autogen/
+.metagpt/
+.gpt-engineer/
+.gpt-pilot/
+.mentat
+.mentatignore
+.plandex/
+plandex.yml
+.plandex.yml
+
+# ---------------------------------------------------------------------------
+# Kiro, Junie, Zed-adjacent, JetBrains AI
+# ---------------------------------------------------------------------------
+.kiro/
+.junie/
+.idea/**/*aiAssistant*
+.idea/**/copilot*
+
+# ---------------------------------------------------------------------------
+# Trae, Lingma, iFlow, Qoder, Augment, PearAI, Void
+# ---------------------------------------------------------------------------
+.trae/
+.trae-cn/
+.lingma/
+.iflow/
+.qoder/
+.augment/
+.augment-guidelines
+.pearai/
+.void/
+
+# ---------------------------------------------------------------------------
+# Bolt, v0, Lovable, Replit Agent
+# ---------------------------------------------------------------------------
+.bolt/
+.v0/
+.lovable/
+.replit
+replit.nix
+
+# ---------------------------------------------------------------------------
+# Pi, Hermes, Codex-adjacent agent dirs, shared agent folders
+# ---------------------------------------------------------------------------
+.pi/
+.hermes/
+.agents/
+.agent/
+.ai/
+
+# ---------------------------------------------------------------------------
+# Sweep, CodeRabbit, Sourcery, Repomix dumps, Task Master, BMAD
+# ---------------------------------------------------------------------------
+sweep.yaml
+.coderabbit.yaml
+.coderabbit.yml
+.sourcery.yaml
+repomix-output.xml
+repomix-output.md
+.taskmaster/
+.taskmasterconfig
+.bmad/
+.bmad-core/
+.bmad-ephemeral/
+bmad-output/
+
+# ---------------------------------------------------------------------------
+# Spec-driven / other agent scaffolds
+# ---------------------------------------------------------------------------
+.specify/
+.grit/
+.repoprompt/
+.anythingllm/
+.manus/
+
+# Skill-creator eval workspaces (iteration runs, not plugin source)
+plugins/*/skills/*-workspace/

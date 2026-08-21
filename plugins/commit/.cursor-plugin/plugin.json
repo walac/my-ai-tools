@@ -1,0 +1,10 @@
+{
+  "name": "commit",
+  "version": "1.1.4",
+  "description": "Smart Git commit with Linux Kernel style messages and DCO sign-off",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["git", "commit", "workflow", "dco", "kernel"]
+}

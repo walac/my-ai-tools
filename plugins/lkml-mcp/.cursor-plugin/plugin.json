@@ -1,0 +1,13 @@
+{
+  "name": "lkml-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Linux Kernel Mailing List threads, patches, and reviews via lore.kernel.org",
+  "author": {
+    "name": "Lucas Zampieri",
+    "email": "lzampier@redhat.com"
+  },
+  "repository": "https://github.com/zampierilucas/lkml-mcp",
+  "homepage": "https://github.com/zampierilucas/lkml-mcp",
+  "license": "MIT",
+  "keywords": ["lkml", "kernel", "linux", "mailing-list", "patches", "lore"]
+}

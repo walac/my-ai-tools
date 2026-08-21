@@ -1,0 +1,29 @@
+# TITLE
+
+Opening: what this mechanism is, why it exists, and what the reader will be able to follow in the tree after this document. Name the kernel version/commit the write-up is pinned to.
+
+## Overview {#overview}
+
+Framing: the shape of the mechanism in one short paragraph before any listing.
+
+## Hardware background {#hardware-background}
+
+Include this section only when the topic needs micro-architecture the reader cannot be assumed to have (instruction encoding, cache coherency, exception frames, TLB). Otherwise delete it.
+
+---
+
+## Data structures {#data-structures}
+
+Framing: the structs and tables the rest of the document keeps pointing at.
+
+---
+
+## Life of a … {#life-of-a}
+
+Framing: the sequence from init through the interesting runtime path.
+
+---
+
+## Further reading in-tree {#further-reading-in-tree}
+
+Framing: where to go next. A handful of files and functions, each with a one-line reason.

@@ -1,0 +1,50 @@
+{
+  "name": "wander-plugins",
+  "owner": {
+    "name": "Wander Lairson Costa",
+    "email": "wander.lairson@gmail.com"
+  },
+  "metadata": {
+    "description": "Personal Cursor marketplace for skills, commands, plugins, and related agent tools.",
+    "version": "1.0.0",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "lkml-mcp",
+      "source": "lkml-mcp",
+      "version": "0.1.0",
+      "description": "MCP server for Linux Kernel Mailing List threads, patches, and reviews via lore.kernel.org"
+    },
+    {
+      "name": "commit",
+      "source": "commit",
+      "version": "1.0.0",
+      "description": "Smart Git commit with Linux Kernel style messages and DCO sign-off"
+    },
+    {
+      "name": "cover",
+      "source": "cover",
+      "version": "1.0.0",
+      "description": "Generate Linux Kernel style cover letters from git commit history"
+    },
+    {
+      "name": "rhel-jira",
+      "source": "rhel-jira",
+      "version": "1.0.0",
+      "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC on issues.redhat.com"
+    },
+    {
+      "name": "pal-skills",
+      "source": "pal-skills",
+      "version": "1.0.0",
+      "description": "Structured analysis skills: architecture analysis, code review, debugging, security audit, refactoring, test generation, and more"
+    },
+    {
+      "name": "kernel-tutorial-writer",
+      "source": "kernel-tutorial-writer",
+      "version": "1.0.0",
+      "description": "In-depth tutorial-style write-ups of Linux kernel subsystems, grounded in the source tree on disk"
+    }
+  ]
+}
