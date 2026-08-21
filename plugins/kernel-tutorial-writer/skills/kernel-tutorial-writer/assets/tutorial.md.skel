@@ -1,6 +1,8 @@
 # TITLE
 
-Opening: what this mechanism is, why it exists, and what the reader will be able to follow in the tree after this document. Name the kernel version/commit the write-up is pinned to.
+# Introduction
+
+Opening: what this mechanism is, why it exists, and what the reader will be able to follow in the tree after this document. Kernel version the text is based on.
 
 ## Overview {#overview}
 
