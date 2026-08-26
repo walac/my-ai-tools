@@ -98,7 +98,7 @@ agent plugin marketplace remove my-ai-tools
 
 ## Install plugins
 
-Plugin names come from this marketplace, not from the GitHub URL: `lkml-mcp`, `commit`, `cover`, `rhel-jira`, `pal-skills`, `kernel-tutorial-writer`.
+Plugin names come from this marketplace, not from the GitHub URL: `lkml-mcp`, `commit`, `cover`, `rhel-jira`, `pal-skills`, `kernel-tutorial-writer`, `evangelizador-infantil`.
 
 ### Cursor
 
@@ -133,6 +133,7 @@ You can also paste `https://github.com/walac/my-ai-tools` into plugin search to 
 | `rhel-jira` | 1.0.0 | Skill | Requires a configured Jira MCP server exposing `jira_*` tools |
 | `pal-skills` | 1.0.0 | Skills | analyze, codereview, debug, and related |
 | `kernel-tutorial-writer` | 1.0.0 | Skill | Kernel subsystem tutorials from the tree on disk |
+| `evangelizador-infantil` | 1.0.0 | Skill | Standalone Spiritist children's evangelization lesson plans |
 
 ## Layout
 

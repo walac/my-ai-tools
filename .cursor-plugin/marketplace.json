@@ -45,6 +45,12 @@
       "source": "kernel-tutorial-writer",
       "version": "1.0.0",
       "description": "In-depth tutorial-style write-ups of Linux kernel subsystems, grounded in the source tree on disk"
+    },
+    {
+      "name": "evangelizador-infantil",
+      "source": "evangelizador-infantil",
+      "version": "1.0.0",
+      "description": "Planeja roteiros autônomos de evangelização infantil espírita."
     }
   ]
 }

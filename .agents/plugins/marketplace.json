@@ -39,6 +39,12 @@
       "source": { "source": "local", "path": "./plugins/kernel-tutorial-writer" },
       "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
       "category": "Developer Tools"
+    },
+    {
+      "name": "evangelizador-infantil",
+      "source": { "source": "local", "path": "./plugins/evangelizador-infantil" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Education"
     }
   ]
 }

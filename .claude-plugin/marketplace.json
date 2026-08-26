@@ -1,6 +1,6 @@
 {
   "name": "my-ai-tools",
-  "description": "Multi-platform agent plugins for Linux kernel and engineering workflows.",
+  "description": "Personal marketplace for agent skills, commands, plugins, and MCP tools.",
   "owner": {
     "name": "Wander Lairson Costa",
     "email": "wander.lairson@gmail.com"
@@ -11,6 +11,7 @@
     { "name": "cover", "source": "./plugins/cover", "description": "Generate Linux Kernel style cover letters from git commit history", "version": "1.1.4" },
     { "name": "rhel-jira", "source": "./plugins/rhel-jira", "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC. Requires a configured Jira MCP server exposing jira_* tools.", "version": "1.0.0" },
     { "name": "pal-skills", "source": "./plugins/pal-skills", "description": "Structured analysis skills: architecture analysis, code review, debugging, security audit, refactoring, test generation, and more", "version": "1.0.0" },
-    { "name": "kernel-tutorial-writer", "source": "./plugins/kernel-tutorial-writer", "description": "In-depth tutorial-style write-ups of Linux kernel subsystems, grounded in the source tree on disk", "version": "1.0.0" }
+    { "name": "kernel-tutorial-writer", "source": "./plugins/kernel-tutorial-writer", "description": "In-depth tutorial-style write-ups of Linux kernel subsystems, grounded in the source tree on disk", "version": "1.0.0" },
+    { "name": "evangelizador-infantil", "source": "./plugins/evangelizador-infantil", "description": "Planeja roteiros autônomos de evangelização infantil espírita.", "version": "1.0.0" }
   ]
 }
