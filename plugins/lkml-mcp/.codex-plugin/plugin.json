@@ -1,0 +1,20 @@
+{
+  "name": "lkml-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Linux Kernel Mailing List threads, patches, and reviews via lore.kernel.org",
+  "author": { "name": "Lucas Zampieri", "email": "lzampier@redhat.com" },
+  "repository": "https://github.com/zampierilucas/lkml-mcp",
+  "homepage": "https://github.com/zampierilucas/lkml-mcp",
+  "license": "MIT",
+  "keywords": ["lkml", "kernel", "linux", "mailing-list", "patches"],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "LKML MCP",
+    "shortDescription": "Search Linux kernel mailing-list discussions.",
+    "longDescription": "Provides MCP tools for lore.kernel.org threads, patches, and reviews.",
+    "developerName": "Lucas Zampieri",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Find the LKML discussion for this kernel patch."]
+  }
+}

@@ -1,11 +1,11 @@
 {
-  "name": "wander-plugins",
+  "name": "my-ai-tools",
   "owner": {
     "name": "Wander Lairson Costa",
     "email": "wander.lairson@gmail.com"
   },
   "metadata": {
-    "description": "Personal Cursor marketplace for skills, commands, plugins, and related agent tools.",
+    "description": "Personal marketplace for agent skills, commands, plugins, and MCP tools.",
     "version": "1.0.0",
     "pluginRoot": "plugins"
   },
@@ -19,20 +19,20 @@
     {
       "name": "commit",
       "source": "commit",
-      "version": "1.0.0",
+      "version": "1.1.4",
       "description": "Smart Git commit with Linux Kernel style messages and DCO sign-off"
     },
     {
       "name": "cover",
       "source": "cover",
-      "version": "1.0.0",
+      "version": "1.1.4",
       "description": "Generate Linux Kernel style cover letters from git commit history"
     },
     {
       "name": "rhel-jira",
       "source": "rhel-jira",
       "version": "1.0.0",
-      "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC on issues.redhat.com"
+      "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC. Requires a configured Jira MCP server exposing jira_* tools."
     },
     {
       "name": "pal-skills",

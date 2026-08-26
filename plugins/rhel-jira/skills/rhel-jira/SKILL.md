@@ -5,7 +5,7 @@ description: RHEL Kernel JIRA workflow assistant. Use when working with RHEL, RH
 
 # RHEL Kernel JIRA Assistant
 
-Projects **RHEL**, **RHELTEST**, **RHELMISC** on `issues.redhat.com`. Tools: `jira_*` from wtmcp.
+Projects **RHEL**, **RHELTEST**, **RHELMISC** on `issues.redhat.com`. Prerequisite: a configured Jira MCP server exposing the `jira_*` tools used below. Before acting, confirm those tools are available. If they are not, explain the prerequisite and stop; do not invent tool calls.
 
 ## Gates
 
@@ -14,17 +14,17 @@ Skipping any gate is a rule violation.
 | Gate | When | How |
 |------|------|-----|
 | TRANSITION | before `jira_transition_issue` | `jira_get_transitions` on that issue — IDs are numeric and differ per issue |
-| TEXT GENERATION | closing summaries, descriptions, @mentions, tables/code, multi-section | one Task; read `comments.md` first |
-| PREVIEW | before any mutate with `dry_run=false` | `AskQuestion` on a **rendered** preview (not raw ADF) |
+| TEXT GENERATION | closing summaries, descriptions, @mentions, tables/code, multi-section | dedicated drafting subtask; read `comments.md` first |
+| PREVIEW | before any mutate with `dry_run=false` | get explicit user approval on a **rendered** preview (not raw ADF) |
 
 | Thought | Reality |
 |---------|---------|
 | "Short, so simple path" | Closing summaries and descriptions are always complex |
-| "Skip the Task" | Closing summaries, @mentions, descriptions, structured content always use the Task |
+| "Skip the drafting subtask" | Closing summaries, @mentions, descriptions, and structured content require the complex path |
 | "I know ADF / the transition ID" | Read `comments.md`. Discover transition IDs fresh |
 | "Skip preview" | Every mutation needs PREVIEW approval |
 
-**Simple text** (no Task): ≤3 plain paragraphs, no @mentions/tables/code, not a closing summary or description.
+**Simple text** (no drafting subtask): ≤3 plain paragraphs, no @mentions/tables/code, not a closing summary or description.
 
 ```json
 {"type": "doc", "version": 1, "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Fixed in upstream commit abc1234."}]}]}
@@ -32,7 +32,7 @@ Skipping any gate is a rule violation.
 
 Unsure of ADF shape → complex path. PREVIEW still applies.
 
-**Complex text** — one Task. Prompt: `comments.md` ADF and @mention rules; issue key, type, purpose; session context (logs, patches, commits, tests).
+**Complex text** — use one dedicated drafting subtask when the platform supports delegation; otherwise draft inline and perform the same validation. Include `comments.md` ADF and @mention rules; issue key, type, purpose; and session context (logs, patches, commits, tests).
 
 1. Essay-form prose (paragraphs, no bullets). pal-skills `chat` if installed, else inline. Reject bullets and retry.
 2. ADF: `type: "doc"`, `version: 1`, `content` of valid block nodes (`comments.md`).
@@ -46,9 +46,9 @@ Unsure of ADF shape → complex path. PREVIEW still applies.
    [JSON for the Jira tool]
    ```
 
-Task failed → write ADF from `comments.md` and self-validate. Drafting a closing summary, description, or @mention without a Task → STOP, complex path.
+If delegation is unavailable or fails, write ADF from `comments.md` and self-validate. Drafting a closing summary, description, or @mention without the complex path → STOP.
 
-**PREVIEW** covers every mutating `jira_*` (create, comment, edit, set_*, transition, assign, labels, components, links, sprint, backlog, delete). Show: key or NEW, type, operation, rendered text. AskQuestion: "Apply this [operation] to [KEY] ([type])?" Yes → `dry_run=false`. No → "What would you like to change?" About to mutate without preview → STOP, `dry_run=true` first.
+**PREVIEW** covers every mutating `jira_*` (create, comment, edit, set_*, transition, assign, labels, components, links, sprint, backlog, delete). Show: key or NEW, type, operation, rendered text. Ask the user: "Apply this [operation] to [KEY] ([type])?" Only explicit approval permits `dry_run=false`; otherwise ask what to change. About to mutate without preview → STOP, `dry_run=true` first.
 
 Wiki markup (`h3.`, `{code}`, `*bold*`) shows as raw text. ADF only. Plain `@name` does not notify; mention nodes do (`comments.md`).
 
@@ -58,7 +58,7 @@ Wiki markup (`h3.`, `{code}`, `*bold*`) shows as raw text. ADF only. Plain `@nam
 2. Don't guess `target_release`, `severity`, `release_blocker` — ask.
 3. Exclude Closed unless asked (`resolution = EMPTY`).
 4. Default `project in (RHEL, RHELTEST, RHELMISC)`.
-5. Never Read/Shell `.jira_cache/` — `jira_read_cache_summary` / `jira_get_issue_from_cache`.
+5. Never inspect `.jira_cache/` with filesystem tools — use `jira_read_cache_summary` / `jira_get_issue_from_cache`.
 6. Link UI is inverted: `inward_issue_key` shows the **outward** description.
 7. Story/Bug ↔ Task: only "Issue split". Task is `outward_issue_key`, Story/Bug is `inward_issue_key` (Story shows "split to Task"):
    ```
@@ -89,7 +89,7 @@ Read `workflow/resolutions.md` first. Never set Done-Errata (automation). Bugs: 
 | not a bug, expected | Not a Bug |
 | incomplete, stale | Incomplete |
 
-Can't infer → AskQuestion menu filtered by issue type. **Duplicate:** need the original key (ask if missing); `link_type="Duplicate"` before closing.
+Can't infer → ask the user to choose from options filtered by issue type. **Duplicate:** need the original key (ask if missing); `link_type="Duplicate"` before closing.
 
 When closing, pull LKML / MR / tests / commits / review into the closing comment.
 
@@ -113,7 +113,7 @@ When closing, pull LKML / MR / tests / commits / review into the closing comment
 
 **Summary:** `net/mlx5: fix timeout in firmware reset flow`
 
-**Task summaries** start `[<Planning Value>]` — read `workflow/task-splitting.md`. Infer (`[QE Task]` to verify, `[DEV Task]` for backport/MR, `[Test Case Writing Task]` for tests). Can't infer → AskQuestion menu.
+**Task summaries** start `[<Planning Value>]` — read `workflow/task-splitting.md`. Infer (`[QE Task]` to verify, `[DEV Task]` for backport/MR, `[Test Case Writing Task]` for tests). Can't infer → ask the user to choose.
 
 **Description:** problem; repro if any; expected vs actual; acceptance; kernel/version; upstream refs.
 

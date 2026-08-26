@@ -1,0 +1,44 @@
+{
+  "name": "my-ai-tools",
+  "interface": {
+    "displayName": "My AI Tools"
+  },
+  "plugins": [
+    {
+      "name": "lkml-mcp",
+      "source": { "source": "local", "path": "./plugins/lkml-mcp" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "commit",
+      "source": { "source": "local", "path": "./plugins/commit" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "cover",
+      "source": { "source": "local", "path": "./plugins/cover" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    },
+    {
+      "name": "rhel-jira",
+      "source": { "source": "local", "path": "./plugins/rhel-jira" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "pal-skills",
+      "source": { "source": "local", "path": "./plugins/pal-skills" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "kernel-tutorial-writer",
+      "source": { "source": "local", "path": "./plugins/kernel-tutorial-writer" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}

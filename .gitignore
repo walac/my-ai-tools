@@ -18,7 +18,6 @@ node_modules/
 .serena_config.yml
 serena_config.yml
 .specstory/
-.mcp.json
 .mcp.local.json
 mcp.local.json
 *.local.json
@@ -274,6 +273,14 @@ replit.nix
 .pi/
 .hermes/
 .agents/
+
+# Keep the repository's Codex marketplace catalog tracked. This exception must
+# follow the local `.agents/` rule above.
+!.agents/
+/.agents/*
+!.agents/plugins/
+/.agents/plugins/*
+!.agents/plugins/marketplace.json
 .agent/
 .ai/
 
@@ -304,3 +311,5 @@ bmad-output/
 
 # Skill-creator eval workspaces (iteration runs, not plugin source)
 plugins/*/skills/*-workspace/
+
+/.mcp.json

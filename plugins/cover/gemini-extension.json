@@ -1,0 +1,5 @@
+{
+  "name": "cover",
+  "version": "1.1.4",
+  "description": "Generate Linux Kernel style cover letters from git commit history"
+}

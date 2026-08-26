@@ -1,7 +1,7 @@
 {
   "name": "rhel-jira",
   "version": "1.0.0",
-  "description": "RHEL Kernel JIRA workflow assistant for creating, searching, transitioning, and managing issues across RHEL, RHELTEST, and RHELMISC",
+  "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC. Requires a configured Jira MCP server exposing jira_* tools.",
   "author": {
     "name": "Wander Lairson Costa",
     "email": "wander@redhat.com"

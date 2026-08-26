@@ -1,6 +1,14 @@
 ---
 name: kernel-tutorial-writer
-description: Use when the user wants an in-depth tutorial-style write-up of a Linux kernel subsystem, mechanism, or source — e.g. "write a tutorial on RCU", "explain jump labels end-to-end", "document how the page allocator works", "deep-dive on NAPI", "walk through text_poke". Also when extending or fixing an existing kernel tutorial in this style (missing elixir links, unclear paragraphs, missing sections or diagrams). Trigger on "explain in depth", "document", or "write up" kernel code even without the word "tutorial": the deliverable is a full standalone Markdown file, not a chat answer.
+description: >
+  Use when the user wants an in-depth tutorial-style write-up of a Linux kernel
+  subsystem, mechanism, or source — e.g. "write a tutorial on RCU", "explain
+  jump labels end-to-end", "document how the page allocator works", "deep-dive
+  on NAPI", "walk through text_poke". Also when extending or fixing an existing
+  kernel tutorial in this style (missing elixir links, unclear paragraphs,
+  missing sections or diagrams). Trigger on "explain in depth", "document", or
+  "write up" kernel code even without the word "tutorial": the deliverable is a
+  full standalone Markdown file, not a chat answer.
 ---
 
 # Kernel Tutorial Writer
@@ -121,10 +129,10 @@ A first draft is not the deliverable. Two separate passes — readability and gr
 
 **Pass 2 — grammar** (skip code, diagrams, kernel identifiers): subject-verb agreement and tense (timeless fact vs narrated sequence — pick one per passage); run-ons and comma splices; `a`/`an`/`the` and singular/plural around kernel terms ("the jump_label subsystem"); dangling modifiers; fragments; punctuation inside Markdown links and footnotes.
 
-Then run the checker from this skill directory against the kernel tree:
+Resolve this skill's installed directory, then run its bundled checker against the kernel tree. Do not assume `scripts/` exists in the kernel workspace:
 
 ```
-python3 scripts/check-tutorial.py ./<topic>.md --tree .
+python3 <skill-dir>/scripts/check-tutorial.py <draft-path> --tree <kernel-tree>
 ```
 
 Fix every error. Warnings are possessive `'s` leftovers — rephrase those too.

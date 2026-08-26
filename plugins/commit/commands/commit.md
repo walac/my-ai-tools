@@ -79,7 +79,7 @@ Task failed → do steps 1–4 inline.
 - **Yes:** one Shell invocation, no other tools, no questions in between. Do **not** run `git commit` via Shell. Run Python. Prefer the plugin script when `CLAUDE_PLUGIN_ROOT` is set:
 
 ```
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/dco-commit.py" "$MSG_TEMP"
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/commit/scripts/dco-commit.py" "$MSG_TEMP"
 ```
 
 If `CLAUDE_PLUGIN_ROOT` is unset, this exact block (argv is `python3`, not `git`):

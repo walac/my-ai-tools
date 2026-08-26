@@ -1,0 +1,11 @@
+{
+  "name": "lkml-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Linux Kernel Mailing List threads, patches, and reviews via lore.kernel.org",
+  "mcpServers": {
+    "lkml": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/zampierilucas/lkml-mcp", "lkml-mcp"]
+    }
+  }
+}

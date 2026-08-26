@@ -1,0 +1,18 @@
+{
+  "name": "cover",
+  "version": "1.1.4",
+  "description": "Generate Linux Kernel style cover letters from git commit history",
+  "author": { "name": "Wander Lairson Costa", "email": "wander@redhat.com" },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["git", "cover-letter", "kernel", "patches"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kernel Cover Letter",
+    "shortDescription": "Generate a PATCH 0/N cover letter.",
+    "longDescription": "Writes Linux-kernel-style patch-series cover letters grounded in Git history.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "defaultPrompt": ["Draft a cover letter for my current patch series."]
+  }
+}

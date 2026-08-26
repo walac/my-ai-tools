@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "lkml": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/zampierilucas/lkml-mcp",
+        "lkml-mcp"
+      ]
+    }
+  }
+}

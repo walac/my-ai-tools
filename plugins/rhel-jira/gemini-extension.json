@@ -1,0 +1,5 @@
+{
+  "name": "rhel-jira",
+  "version": "1.0.0",
+  "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC. Requires a configured Jira MCP server exposing jira_* tools."
+}
