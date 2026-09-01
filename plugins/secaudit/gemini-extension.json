@@ -1,0 +1,5 @@
+{
+  "name": "secaudit",
+  "version": "1.0.0",
+  "description": "Security audit against OWASP Top 10 and code-level vulnerability patterns."
+}

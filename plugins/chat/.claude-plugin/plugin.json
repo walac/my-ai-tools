@@ -1,0 +1,12 @@
+{
+  "name": "chat",
+  "displayName": "Chat",
+  "version": "1.0.0",
+  "description": "Collaborative technical brainstorming and discussion of engineering decisions.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["chat", "brainstorm", "discussion"]
+}

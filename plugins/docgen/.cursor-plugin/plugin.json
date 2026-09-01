@@ -1,0 +1,10 @@
+{
+  "name": "docgen",
+  "version": "1.0.0",
+  "description": "Generate documentation, docstrings, and doc comments for code.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["docgen", "documentation", "docstrings"]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "challenge",
+  "version": "1.0.0",
+  "description": "Adversarial pushback on claims, prior answers, and assumptions that may not hold.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["challenge", "skepticism", "review"]
+}

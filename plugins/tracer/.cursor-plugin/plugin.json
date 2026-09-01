@@ -1,0 +1,10 @@
+{
+  "name": "tracer",
+  "version": "1.0.0",
+  "description": "Trace call chains, execution flow, and code dependencies with file:line evidence.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["tracer", "call-chain", "dependencies"]
+}

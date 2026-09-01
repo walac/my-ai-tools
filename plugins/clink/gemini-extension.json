@@ -1,0 +1,5 @@
+{
+  "name": "clink",
+  "version": "1.0.0",
+  "description": "Delegate a task to Gemini, Claude, or Codex CLI for a second-model opinion."
+}

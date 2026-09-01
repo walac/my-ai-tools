@@ -1,0 +1,10 @@
+{
+  "name": "codereview",
+  "version": "1.0.0",
+  "description": "Code and PR review for bugs, quality issues, and maintainability problems.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["codereview", "review", "pr", "quality"]
+}

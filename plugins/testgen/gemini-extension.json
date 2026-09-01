@@ -1,0 +1,5 @@
+{
+  "name": "testgen",
+  "version": "1.0.0",
+  "description": "Generate unit and integration tests with edge-case and failure-mode coverage."
+}

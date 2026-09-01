@@ -1,0 +1,5 @@
+{
+  "name": "debug",
+  "version": "1.0.0",
+  "description": "Root-cause analysis for bugs, crashes, failing tests, and unexpected behavior."
+}

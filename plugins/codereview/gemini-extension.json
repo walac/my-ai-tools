@@ -1,0 +1,5 @@
+{
+  "name": "codereview",
+  "version": "1.0.0",
+  "description": "Code and PR review for bugs, quality issues, and maintainability problems."
+}

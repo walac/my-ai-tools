@@ -1,0 +1,21 @@
+{
+  "name": "challenge",
+  "version": "1.0.0",
+  "description": "Adversarial pushback on claims, prior answers, and assumptions that may not hold.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["challenge", "skepticism", "review"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Challenge",
+    "shortDescription": "Push back on claims that may be wrong.",
+    "longDescription": "Challenges assertions, contradictions, and shaky conclusions until they hold up.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Challenge this claim and check whether it actually holds."]
+  }
+}

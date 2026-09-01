@@ -1,0 +1,5 @@
+{
+  "name": "docgen",
+  "version": "1.0.0",
+  "description": "Generate documentation, docstrings, and doc comments for code."
+}

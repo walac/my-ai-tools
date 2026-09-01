@@ -35,10 +35,94 @@
       "description": "RHEL Kernel JIRA workflow assistant for RHEL, RHELTEST, and RHELMISC. Requires a configured Jira MCP server exposing jira_* tools."
     },
     {
-      "name": "pal-skills",
-      "source": "pal-skills",
+      "name": "analyze",
+      "source": "analyze",
       "version": "1.0.0",
-      "description": "Structured analysis skills: architecture analysis, code review, debugging, security audit, refactoring, test generation, and more"
+      "description": "Strategic architecture and codebase analysis: tech debt, scalability, and long-term fit."
+    },
+    {
+      "name": "challenge",
+      "source": "challenge",
+      "version": "1.0.0",
+      "description": "Adversarial pushback on claims, prior answers, and assumptions that may not hold."
+    },
+    {
+      "name": "chat",
+      "source": "chat",
+      "version": "1.0.0",
+      "description": "Collaborative technical brainstorming and discussion of engineering decisions."
+    },
+    {
+      "name": "clink",
+      "source": "clink",
+      "version": "1.0.0",
+      "description": "Delegate a task to Gemini, Claude, or Codex CLI for a second-model opinion."
+    },
+    {
+      "name": "codereview",
+      "source": "codereview",
+      "version": "1.0.0",
+      "description": "Code and PR review for bugs, quality issues, and maintainability problems."
+    },
+    {
+      "name": "consensus",
+      "source": "consensus",
+      "version": "1.0.0",
+      "description": "Evaluate proposals and compare approaches from multiple perspectives."
+    },
+    {
+      "name": "debug",
+      "source": "debug",
+      "version": "1.0.0",
+      "description": "Root-cause analysis for bugs, crashes, failing tests, and unexpected behavior."
+    },
+    {
+      "name": "docgen",
+      "source": "docgen",
+      "version": "1.0.0",
+      "description": "Generate documentation, docstrings, and doc comments for code."
+    },
+    {
+      "name": "planner",
+      "source": "planner",
+      "version": "1.0.0",
+      "description": "Implementation plans, migration strategies, and technical roadmaps."
+    },
+    {
+      "name": "precommit",
+      "source": "precommit",
+      "version": "1.0.0",
+      "description": "Validate staged changes, diffs, and PRs before committing."
+    },
+    {
+      "name": "refactor",
+      "source": "refactor",
+      "version": "1.0.0",
+      "description": "Refactor code to reduce complexity, decompose large units, and improve organization."
+    },
+    {
+      "name": "secaudit",
+      "source": "secaudit",
+      "version": "1.0.0",
+      "description": "Security audit against OWASP Top 10 and code-level vulnerability patterns."
+    },
+    {
+      "name": "testgen",
+      "source": "testgen",
+      "version": "1.0.0",
+      "description": "Generate unit and integration tests with edge-case and failure-mode coverage."
+    },
+    {
+      "name": "thinkdeep",
+      "source": "thinkdeep",
+      "version": "1.0.0",
+      "description": "Deep collaborative reasoning through design decisions, trade-offs, and second opinions."
+    },
+    {
+      "name": "tracer",
+      "source": "tracer",
+      "version": "1.0.0",
+      "description": "Trace call chains, execution flow, and code dependencies with file:line evidence."
     },
     {
       "name": "kernel-tutorial-writer",

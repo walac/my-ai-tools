@@ -1,0 +1,10 @@
+{
+  "name": "thinkdeep",
+  "version": "1.0.0",
+  "description": "Deep collaborative reasoning through design decisions, trade-offs, and second opinions.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["thinkdeep", "reasoning", "trade-offs"]
+}

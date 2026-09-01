@@ -1,0 +1,5 @@
+{
+  "name": "precommit",
+  "version": "1.0.0",
+  "description": "Validate staged changes, diffs, and PRs before committing."
+}

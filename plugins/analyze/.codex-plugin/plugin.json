@@ -1,0 +1,21 @@
+{
+  "name": "analyze",
+  "version": "1.0.0",
+  "description": "Strategic architecture and codebase analysis: tech debt, scalability, and long-term fit.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["analyze", "architecture", "assessment", "tech-debt"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Analyze",
+    "shortDescription": "Assess architecture and tech debt.",
+    "longDescription": "Performs a holistic technical audit of architecture, scalability, and maintainability.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Analyze this codebase's architecture and technical health."]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "debug",
+  "displayName": "Debug",
+  "version": "1.0.0",
+  "description": "Root-cause analysis for bugs, crashes, failing tests, and unexpected behavior.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["debug", "root-cause", "crash", "regression"]
+}

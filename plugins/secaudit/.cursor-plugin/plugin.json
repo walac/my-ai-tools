@@ -1,0 +1,10 @@
+{
+  "name": "secaudit",
+  "version": "1.0.0",
+  "description": "Security audit against OWASP Top 10 and code-level vulnerability patterns.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["secaudit", "security", "owasp", "vulnerability"]
+}

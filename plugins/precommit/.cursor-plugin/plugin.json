@@ -1,0 +1,10 @@
+{
+  "name": "precommit",
+  "version": "1.0.0",
+  "description": "Validate staged changes, diffs, and PRs before committing.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["precommit", "diff", "review", "validate"]
+}

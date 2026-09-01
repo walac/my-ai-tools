@@ -1,0 +1,21 @@
+{
+  "name": "docgen",
+  "version": "1.0.0",
+  "description": "Generate documentation, docstrings, and doc comments for code.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["docgen", "documentation", "docstrings"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Docgen",
+    "shortDescription": "Generate docs and docstrings.",
+    "longDescription": "Writes documentation, docstrings, and comments grounded in the code that exists.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Write"],
+    "defaultPrompt": ["Document this code with clear comments and docs."]
+  }
+}

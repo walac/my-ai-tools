@@ -79,8 +79,8 @@ Claude's validator also checks the marketplace when given `.claude-plugin/market
 ```bash
 codex plugin marketplace add .
 claude plugin marketplace add .
-gemini extensions link ./plugins/pal-skills
+gemini extensions link ./plugins/codereview
 agent plugin marketplace add .
 ```
 
-Then install the desired plugin with the platform's plugin UI or CLI. For Gemini, link or install each desired `plugins/<name>` directory. Test external MCP integrations only after reviewing their configuration and having their required runtime installed.
+Then install the desired plugin with the platform's plugin UI or CLI. For Gemini, link or install each desired `plugins/<name>` directory. The former `pal-skills` bundle is gone: unlink `./plugins/pal-skills` and link individual directories instead. Test external MCP integrations only after reviewing their configuration and having their required runtime installed.

@@ -21,7 +21,7 @@ See [platform support](docs/PLATFORM_SUPPORT.md) for validation and local-instal
 
 ```bash
 codex plugin marketplace add walac/my-ai-tools
-codex plugin add pal-skills@my-ai-tools
+codex plugin add codereview@my-ai-tools
 ```
 
 Use `codex plugin list` to browse available plugins. The Codex catalog is `.agents/plugins/marketplace.json`.
@@ -30,7 +30,7 @@ Use `codex plugin list` to browse available plugins. The Codex catalog is `.agen
 
 ```bash
 claude plugin marketplace add walac/my-ai-tools
-claude plugin install pal-skills@my-ai-tools
+claude plugin install codereview@my-ai-tools
 ```
 
 Claude Code uses `.claude-plugin/marketplace.json`; plugin skills are namespaced by plugin name.
@@ -42,10 +42,10 @@ Gemini CLI installs each plugin as an extension. Clone the repository, `cd` into
 ```bash
 git clone https://github.com/walac/my-ai-tools.git
 cd my-ai-tools
-gemini extensions link ./plugins/pal-skills
+gemini extensions link ./plugins/codereview
 ```
 
-Use `gemini extensions validate ./plugins/pal-skills` before linking a modified extension.
+Use `gemini extensions validate ./plugins/codereview` before linking a modified extension.
 
 ## Install with Cursor
 
@@ -98,7 +98,7 @@ agent plugin marketplace remove my-ai-tools
 
 ## Install plugins
 
-Plugin names come from this marketplace, not from the GitHub URL: `lkml-mcp`, `commit`, `cover`, `rhel-jira`, `pal-skills`, `kernel-tutorial-writer`, `evangelizador-infantil`.
+Plugin names come from this marketplace, not from the GitHub URL: `lkml-mcp`, `commit`, `cover`, `rhel-jira`, `analyze`, `challenge`, `chat`, `clink`, `codereview`, `consensus`, `debug`, `docgen`, `planner`, `precommit`, `refactor`, `secaudit`, `testgen`, `thinkdeep`, `tracer`, `kernel-tutorial-writer`, `evangelizador-infantil`.
 
 ### Cursor
 
@@ -131,9 +131,29 @@ You can also paste `https://github.com/walac/my-ai-tools` into plugin search to 
 | `commit` | 1.1.4 | Command + skill | Cursor `/commit`; other platforms use the skill — kernel-style messages, DCO |
 | `cover` | 1.1.4 | Command + skill | Cursor `/cover`; other platforms use the skill — series cover letters; uses LKML MCP when present |
 | `rhel-jira` | 1.0.0 | Skill | Requires a configured Jira MCP server exposing `jira_*` tools |
-| `pal-skills` | 1.0.0 | Skills | analyze, codereview, debug, and related |
+| `analyze` | 1.0.0 | Skill | Architecture and codebase assessment |
+| `challenge` | 1.0.0 | Skill | Adversarial pushback on claims |
+| `chat` | 1.0.0 | Skill | Technical brainstorming and discussion |
+| `clink` | 1.0.0 | Skill | Delegate to Gemini, Claude, or Codex CLI |
+| `codereview` | 1.0.0 | Skill | Code and PR review |
+| `consensus` | 1.0.0 | Skill | Compare approaches and trade-offs |
+| `debug` | 1.0.0 | Skill | Root-cause analysis |
+| `docgen` | 1.0.0 | Skill | Documentation and docstrings |
+| `planner` | 1.0.0 | Skill | Implementation plans and roadmaps |
+| `precommit` | 1.0.0 | Skill | Validate changes before commit |
+| `refactor` | 1.0.0 | Skill | Reduce complexity and reorganize code |
+| `secaudit` | 1.0.0 | Skill | OWASP-oriented security audit |
+| `testgen` | 1.0.0 | Skill | Unit and integration test generation |
+| `thinkdeep` | 1.0.0 | Skill | Deep reasoning through design decisions |
+| `tracer` | 1.0.0 | Skill | Call chains and execution flow |
 | `kernel-tutorial-writer` | 1.0.0 | Skill | Kernel subsystem tutorials from the tree on disk |
 | `evangelizador-infantil` | 1.0.0 | Skill | Standalone Spiritist children's evangelization lesson plans |
+
+### Upgrading from `pal-skills`
+
+`pal-skills` is no longer a marketplace plugin. Uninstall it, then install the skills you want as separate plugins: `analyze`, `challenge`, `chat`, `clink`, `codereview`, `consensus`, `debug`, `docgen`, `planner`, `precommit`, `refactor`, `secaudit`, `testgen`, `thinkdeep`, `tracer`.
+
+Claude Code skill ids change from `pal-skills:<name>` to `<name>:<name>`. Gemini users should unlink `./plugins/pal-skills` and link the plugin directories they need. `rhel-jira` still drafts inline if `chat` and `challenge` are not installed.
 
 ## Layout
 

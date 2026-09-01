@@ -1,0 +1,10 @@
+{
+  "name": "planner",
+  "version": "1.0.0",
+  "description": "Implementation plans, migration strategies, and technical roadmaps.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["planner", "plan", "roadmap", "migration"]
+}

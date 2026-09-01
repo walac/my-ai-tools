@@ -1,0 +1,21 @@
+{
+  "name": "clink",
+  "version": "1.0.0",
+  "description": "Delegate a task to Gemini, Claude, or Codex CLI for a second-model opinion.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["clink", "gemini", "codex", "delegate"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Clink",
+    "shortDescription": "Ask another AI CLI for a second opinion.",
+    "longDescription": "Bridges to Gemini, Claude, or Codex CLIs when a second model's perspective adds value.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Ask Gemini for a second opinion on this."]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "refactor",
+  "version": "1.0.0",
+  "description": "Refactor code to reduce complexity, decompose large units, and improve organization.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "keywords": ["refactor", "complexity", "cleanup"]
+}

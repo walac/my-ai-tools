@@ -1,0 +1,21 @@
+{
+  "name": "tracer",
+  "version": "1.0.0",
+  "description": "Trace call chains, execution flow, and code dependencies with file:line evidence.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["tracer", "call-chain", "dependencies"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Tracer",
+    "shortDescription": "Trace call chains and execution flow.",
+    "longDescription": "Follows actual code paths and documents call chains and dependencies with file:line evidence.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Trace how this function is reached and what it calls."]
+  }
+}

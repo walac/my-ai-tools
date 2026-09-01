@@ -34,9 +34,9 @@ Unsure of ADF shape → complex path. PREVIEW still applies.
 
 **Complex text** — use one dedicated drafting subtask when the platform supports delegation; otherwise draft inline and perform the same validation. Include `comments.md` ADF and @mention rules; issue key, type, purpose; and session context (logs, patches, commits, tests).
 
-1. Essay-form prose (paragraphs, no bullets). pal-skills `chat` if installed, else inline. Reject bullets and retry.
+1. Essay-form prose (paragraphs, no bullets). `chat` skill if installed, else inline. Reject bullets and retry.
 2. ADF: `type: "doc"`, `version: 1`, `content` of valid block nodes (`comments.md`).
-3. Validate (pal-skills `challenge` if installed, else inline): ADF not wiki; root doc/v1; blocks only paragraph/heading/bulletList/orderedList/codeBlock/table/rule/blockquote; inline text+marks (strong, em, code, link), not `*bold*` / `h3.` / `{code}`. Fix and re-check.
+3. Validate (`challenge` skill if installed, else inline): ADF not wiki; root doc/v1; blocks only paragraph/heading/bulletList/orderedList/codeBlock/table/rule/blockquote; inline text+marks (strong, em, code, link), not `*bold*` / `h3.` / `{code}`. Fix and re-check.
 4. Return:
    ```
    PLAIN_TEXT:

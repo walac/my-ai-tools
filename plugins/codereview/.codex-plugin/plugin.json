@@ -1,0 +1,21 @@
+{
+  "name": "codereview",
+  "version": "1.0.0",
+  "description": "Code and PR review for bugs, quality issues, and maintainability problems.",
+  "author": {
+    "name": "Wander Lairson Costa",
+    "email": "wander@redhat.com"
+  },
+  "repository": "https://github.com/walac/my-ai-tools",
+  "keywords": ["codereview", "review", "pr", "quality"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Code Review",
+    "shortDescription": "Review code and diffs for bugs.",
+    "longDescription": "Reviews files, diffs, and PRs for defects, quality issues, and maintainability.",
+    "developerName": "Wander Lairson Costa",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive"],
+    "defaultPrompt": ["Review my current changes for bugs and quality issues."]
+  }
+}
