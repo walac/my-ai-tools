@@ -19,7 +19,7 @@ This skill's directory (the folder containing this `SKILL.md`) has:
 
 - `assets/tutorial.md.skel` — start from this shape
 - `references/excerpt.md` — read before writing the first listing (style, not claims)
-- `scripts/check-tutorial.py` — run on the draft before calling it done
+- `scripts/check-tutorial` — run on the draft before calling it done
 
 ## Investigate first
 
@@ -132,7 +132,7 @@ A first draft is not the deliverable. Two separate passes — readability and gr
 Resolve this skill's installed directory, then run its bundled checker against the kernel tree. Do not assume `scripts/` exists in the kernel workspace:
 
 ```
-python3 <skill-dir>/scripts/check-tutorial.py <draft-path> --tree <kernel-tree>
+<skill-dir>/scripts/check-tutorial <draft-path> --tree <kernel-tree>
 ```
 
 Fix every error. Warnings are possessive `'s` leftovers — rephrase those too.

@@ -4,14 +4,14 @@
     {
       "id": 1,
       "prompt": "The current directory is a small Linux-like tree (Makefile with VERSION/PATCHLEVEL, include/linux/, kernel/, init/, Documentation/). There is a broken tutorial at evals/files/broken-tutorial.md (copied next to you as broken-tutorial.md). Fix it in place so it becomes a valid kernel tutorial for the fake_key mechanism in this tree: elixir links with verified #L against files on disk, {#slug} on every heading, no numbers in headings, --- before every ## except the first, .secref targets that exist, no possessive 's, one elixir version prefix (v6.16). Write the result to outputs/fake_key.md.",
-      "expected_output": "A Markdown tutorial at outputs/fake_key.md that passes scripts/check-tutorial.py --tree <mini-kernel>",
+      "expected_output": "A Markdown tutorial at outputs/fake_key.md that passes scripts/check-tutorial --tree <mini-kernel>",
       "files": [
         "evals/files/mini-kernel",
         "evals/files/broken-tutorial.md"
       ],
       "expectations": [
         "Wrote outputs/fake_key.md",
-        "check-tutorial.py reports 0 errors against the mini-kernel tree",
+        "check-tutorial reports 0 errors against the mini-kernel tree",
         "No numbered headings",
         "Every heading has a {#slug}",
         "Every elixir link has #L and that line contains the linked symbol",
@@ -26,7 +26,7 @@
       "files": ["evals/files/mini-kernel"],
       "expectations": [
         "Wrote outputs/fake_key.md rather than only a chat answer",
-        "check-tutorial.py reports 0 errors against the mini-kernel tree",
+        "check-tutorial reports 0 errors against the mini-kernel tree",
         "Mentions fake_key_enable, fake_key_disable, fake_key_init, and early_boot_setup",
         "Grounds the init-ordering invariant in early_boot_setup (a Concretely: call site)",
         "Has a Further reading in-tree section",

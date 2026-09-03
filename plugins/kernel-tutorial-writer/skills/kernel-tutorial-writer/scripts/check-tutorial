@@ -2,7 +2,7 @@
 """Check a kernel tutorial Markdown file against this skill's mechanical rules.
 
 Usage:
-  python3 check-tutorial.py TUTORIAL.md [--tree KERNEL_ROOT]
+  check-tutorial TUTORIAL.md [--tree KERNEL_ROOT]
 
 Exit 0 if no errors (warnings are allowed). Exit 1 if any error.
 """
@@ -19,9 +19,7 @@ SLUG_RE = re.compile(r"\s+\{#([a-z0-9][a-z0-9-]*)\}\s*$")
 NUMBERED_HEADING_RE = re.compile(r"^\d+(\.\d+)*\s+\S")
 HR_RE = re.compile(r"^-{3,}\s*$")
 SECREF_RE = re.compile(r"\[\]\(#([a-z0-9-]+)\)\{\.secref\}")
-ELIXIR_RE = re.compile(
-    r"https://elixir\.bootlin\.com/linux/([^/\s)]+)/source/([^)\s#]+)(#L(\d+))?"
-)
+ELIXIR_RE = re.compile(r"https://elixir\.bootlin\.com/linux/([^/\s)]+)/source/([^)\s#]+)(#L(\d+))?")
 MD_LINK_RE = re.compile(r"\[([^\]]*)\]\((https://elixir\.bootlin\.com/linux/[^)]+)\)")
 IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 POSSESSIVE_RE = re.compile(r"\b([A-Za-z][A-Za-z0-9_]*)'s\b")
@@ -90,8 +88,7 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
             errors.append(f"{path}:{lineno}: heading missing {{#slug}}: {display!r}")
         elif slug in slugs:
             errors.append(
-                f"{path}:{lineno}: duplicate slug {{#{slug}}} "
-                f"(also line {slugs[slug]})"
+                f"{path}:{lineno}: duplicate slug {{#{slug}}} " f"(also line {slugs[slug]})"
             )
         else:
             slugs[slug] = lineno
@@ -113,18 +110,14 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
             prev = (ln, line)
             break
         if prev is None or not HR_RE.match(prev[1].strip()):
-            errors.append(
-                f"{path}:{lineno}: ## heading {display!r} is not preceded by ---"
-            )
+            errors.append(f"{path}:{lineno}: ## heading {display!r} is not preceded by ---")
 
     for lineno, line, in_code in rows:
         if in_code:
             continue
         for slug in SECREF_RE.findall(line):
             if slug not in slugs:
-                errors.append(
-                    f"{path}:{lineno}: .secref target {{#{slug}}} does not exist"
-                )
+                errors.append(f"{path}:{lineno}: .secref target {{#{slug}}} does not exist")
 
     versions: set[str] = set()
     symbol_urls: dict[str, str] = {}
@@ -138,9 +131,7 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
             version, relpath, hashpart, linenum = em.group(1), em.group(2), em.group(3), em.group(4)
             versions.add(version)
             if not hashpart or not linenum:
-                errors.append(
-                    f"{path}:{lineno}: elixir link has no #L<number>: {url}"
-                )
+                errors.append(f"{path}:{lineno}: elixir link has no #L<number>: {url}")
                 continue
             ident = text_label.strip().strip("`").rstrip("()")
             if IDENT_RE.match(ident):
@@ -158,16 +149,13 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 continue
             src = tree / relpath
             if not src.is_file():
-                errors.append(
-                    f"{path}:{lineno}: elixir path not in tree: {relpath}"
-                )
+                errors.append(f"{path}:{lineno}: elixir path not in tree: {relpath}")
                 continue
             src_lines = src.read_text(encoding="utf-8", errors="replace").splitlines()
             n = int(linenum)
             if n < 1 or n > len(src_lines):
                 errors.append(
-                    f"{path}:{lineno}: {relpath}#L{n} is out of range "
-                    f"({len(src_lines)} lines)"
+                    f"{path}:{lineno}: {relpath}#L{n} is out of range " f"({len(src_lines)} lines)"
                 )
                 continue
             target = src_lines[n - 1]
