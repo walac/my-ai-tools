@@ -2,13 +2,13 @@
 name: evangelizador-infantil
 description: >
   Gera um roteiro autônomo de evangelização infantil espírita (4 a 13 anos),
-  pronto para usar em sala. Use when the user pede aula, roteiro, plano de
+  pronto para usar em sala. Usar quando o usuário pede aula, roteiro, plano de
   aula ou atividade para crianças em centro espírita; evangelização infantil;
   ensino espírita infantil; parábolas ou Kardec para crianças; "aula sobre",
   "roteiro sobre", "tema da aula"; "próxima aula" (aula nova, não continuação);
   ou material para evangelizadores — mesmo em pedidos breves ("aula sobre perdão").
-  Do not use for regular school lessons, non-Spiritist catechesis, or adult
-  evangelization.
+  Não usar para aulas escolares comuns, catequese não espírita ou evangelização
+  de adultos.
 ---
 
 # Evangelização Infantil Espírita
@@ -25,23 +25,23 @@ O diretório desta skill (a pasta deste `SKILL.md`) tem:
 Cada roteiro é um mundo fechado. Quem abre só aquele arquivo conduz a aula.
 
 - Sem "na aula passada", "como vimos", continuação, temporada ou numeração de currículo.
-- Personagens nascem e se encerram neste roteiro. Não reler outros `.md` da CWD para enredo, elenco ou sequência.
+- Personagens nascem e se encerram neste roteiro. Não reler outros `.md` do diretório de trabalho atual para enredo, elenco ou sequência.
 - "Próxima aula" sem tema: perguntar o tema. Não inventar a próxima lição de uma série.
 - Conceitos gerais da doutrina (Deus, Jesus, caridade) são permitidos; memória de um roteiro anterior, não.
 
 ## Entrega
 
-Roteiro **pronto para sala** no slot. Padrão **60 min**; se o usuário der outro tempo, caber nele. Estourar o tempo é falha de revisão.
+Roteiro **pronto para sala** no tempo previsto. Padrão **60 min**; se o usuário der outro tempo, caber nele. Estourar o tempo é falha de revisão.
 
-Orçamento padrão (ajustar se o slot mudar):
+Orçamento padrão (ajustar se a duração mudar):
 
-* Prece de abertura: 3 min
-* Incentivação: 7 min
-* Desenvolvimento: 20 min
-* Atividade: 22 min
-* Encerramento: 8 min
+- Prece de abertura: 3 min
+- Incentivação: 7 min
+- Desenvolvimento: 20 min
+- Atividade: 22 min
+- Encerramento: 8 min
 
-Completo onde a sala precisa de script: narrativa canônica, diálogos, perguntas com respostas esperadas, passos numerados, contingências. Não triplicate a história. Não preencher com repetição.
+Completo onde a sala precisa de texto pronto: narrativa canônica, diálogos, perguntas com respostas esperadas, passos numerados, contingências.Não triplicar a história. Não preencher com repetição.
 
 Se o usuário pedir só uma faixa etária, gerar só essa. Senão, as três (crianças faltam; escolhe no dia).
 
@@ -50,14 +50,14 @@ Se o usuário pedir só uma faixa etária, gerar só essa. Senão, as três (cri
 * Público: 4 a 13 anos (mista). Atividades simples para os pequenos, desafiadoras para os maiores.
 * Equipe: 2 evangelizadores. Na versão mista, dizer como se dividem. Nas outras, o segundo é apoio (material, criança inquieta) — não fica ocioso.
 * Postura: todos sentados à mesa o tempo todo. Sem ficar em pé, roda no chão, circular ou deslocar. Fantoche e tabuleiro na mesa.
-* Volume: salas vizinhas com reuniões mediúnicas. Conversa ok; sem algazarra, gritaria, corrida ou canto alto.
+* Volume: salas vizinhas com reuniões mediúnicas. Conversa em tom normal é permitida; sem algazarra, gritaria, corrida ou canto alto.
 
 ## 3 versões
 
 Incentivação, Atividades e Recapitulação sempre em:
 
-1. Mais novos (4 a 7)
-2. Mais velhos (8 a 13)
+1. Mais novos (4 a 9)
+2. Mais velhos (10 a 13)
 3. Turma mista (4 a 13) — duas variações quando fizer sentido
 
 Desenvolvimento: **uma** história canônica completa + adaptações curtas por faixa (vocabulário, quais `[PAUSA]` manter, perguntas, o que cortar para caber no tempo). Turma mista: como os 2 evangelizadores se dividem na hora de contar — não reescrever a história.
@@ -81,7 +81,7 @@ Estas quatro dimensões orientam toda a aula:
 
 ### 3. Prece de Abertura
 
-3 opções, linguagem simples (acessível a 4 a 13). Fechar com **Que assim seja** — nunca Amém.
+3 opções, linguagem simples (acessível a 4 a 13). Fechar com **Que assim seja** ao invés de *Amém*.
 
 ### 4. Incentivação
 
@@ -97,10 +97,11 @@ Depois: adaptação 4 a 7; adaptação 8 a 13; notas da turma mista (divisão da
 
 ### 6. Atividades (individuais)
 
-Ler `references/materiais.md`. Só itens dessa lista. Na atividade, tipo — não estoque ("tesouras", "cola", não "19 tesouras"). Quantidade só se a atividade depender de um item específico (ex.: 1 fantoche de porquinho).
+Ler `references/materiais.md`. Só itens dessa lista. Na atividade, tipo — não estoque ("tesouras", "cola", não "19 tesouras"). Quantidade só se a atividade depender de um item específico (ex.: 1 fantoche de porquinho). Sempre algo envolvendo arte, fora do que eles normalmente fariam em casa ou na escola.
+Exemplos: massa de modelar, desenho, etc. As crianças gostam muito de desenhar.
 
-* 4 a 7: manual/sensorial
-* 8 a 13: cognitivo/escrita/reflexão
+* 4 a 9: manual/sensorial
+* 10 a 13: algo mais cognitivo, mas divertido. Não pode se parecer com lição de casa.
 * Mista: como conciliar idades e como os 2 evangelizadores se dividem
 
 Por atividade: materiais; preparação; passos; o que dizer em cada etapa; contingências ("Se terminar rápido...", "Se faltar material..."); resultado esperado.
@@ -123,12 +124,12 @@ Não inventar capítulo, versículo, item kardecista nem trecho. Citação errad
 
 ## Tom
 
-* PT-BR natural, caloroso
+* Português brasileiro natural, caloroso
 * Vocabulário: **Deus Pai**, **irmão Jesus**. Progressão gradual de conceitos.
 * Temas espirituais com alegria — sem medo, culpa ou punição
 * Inclusão: "sua família", "quem cuida de você", "em casa" — não assumir pai+mãe nem condição econômica
 
-## Markdown
+## Formatação
 
 * Intervalos com "a" ("4 a 13 anos", não "4-13")
 * Listas com `*`; passos numerados aninhados com 4 espaços sob o item pai
@@ -138,13 +139,12 @@ Não inventar capítulo, versículo, item kardecista nem trecho. Citação errad
 
 ## Arquivo
 
-`<tema-da-aula>.md` no diretório de trabalho atual. Sem subdiretórios. Slug do tema (minúsculas, hífens, sem acento). Sem prefixo numérico.
+`<tema-da-aula>.md` no diretório de trabalho atual. Sem subdiretórios. Nome de arquivo do tema (minúsculas, hífens, sem acento). Sem prefixo numérico.
 
 * Sem tema: perguntar; não inventar.
 * Arquivo já existe: perguntar antes de sobrescrever.
-* Se o CWD for este marketplace (`plugins/evangelizador-infantil` ou `.cursor-plugin/marketplace.json` na raiz): perguntar o diretório de destino. Não soltar roteiro no repositório do plugin.
 
-O entregável é o arquivo, não um dump no chat.
+O entregável é o arquivo, não o texto colado no chat.
 
 ## Revisão (no próprio texto, antes de salvar)
 
