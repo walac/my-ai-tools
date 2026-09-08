@@ -1,11 +1,11 @@
 ---
 name: clink
-description: "Use when the user asks for a second opinion from another AI model, wants to delegate a task to Gemini or Codex, or says ask gemini, ask codex, get gemini's take, run this through gemini, use another model, what does gemini think. Also use when the user needs web search integrated with code analysis."
+description: "Use when the user asks for a second opinion from a different external AI CLI, asks to delegate to Gemini, Claude, Codex, or Cursor CLI, or needs Gemini web search integrated with code analysis."
 ---
 
 # External CLI Agent Bridge
 
-Delegate a task to an external AI CLI (Gemini, Claude, Codex) and return its
+Delegate a task to an external AI CLI (Gemini, Claude, Codex, Cursor) and return its
 response. This is useful when a second model's perspective adds value, when
 the user explicitly asks for another model, or when Gemini's web search
 capability is needed.
@@ -17,6 +17,7 @@ capability is needed.
 | gemini | Web search, alternative perspective, long-context | Run `command -v gemini` to check |
 | claude | Code generation, careful reasoning | Run `command -v claude` to check |
 | codex | Fast code review, web-aware analysis | Run `command -v codex` to check |
+| cursor | Cursor Agent coding tasks | Run `command -v agent` to check |
 
 Default to **gemini** unless the user specifies otherwise.
 
@@ -30,8 +31,12 @@ First, locate this skill's script directory. The script is at `scripts/invoke-cl
 echo "Your prompt here" | /path/to/skills/clink/scripts/invoke-cli.sh gemini
 ```
 
-The script reads the full prompt from stdin and passes it to the
-selected CLI via its `-p` flag. All output goes to stdout.
+The script reads the full prompt from stdin and invokes the selected CLI using
+its provider-specific non-interactive interface. All output goes to stdout.
+
+The `cursor` provider uses the Cursor Agent CLI binary, `agent`, not the
+`cursor` desktop command. It adds `-p --mode=ask --trust` so it returns a
+read-only response without an interactive prompt.
 
 ## Roles
 
@@ -97,7 +102,8 @@ ROLE
 ## Handling the Response
 
 - Extract and present the `<SUMMARY>...</SUMMARY>` block if present
-- Always attribute: "**Gemini's assessment:**" or "**Codex's review:**"
+- Always attribute the response to its provider, such as "**Gemini's assessment:**",
+  "**Claude's assessment:**", "**Codex's review:**", or "**Cursor's assessment:**"
 - Do not present the external CLI's response as your own analysis
 - If the response is very long (>20k chars), present only the summary
 

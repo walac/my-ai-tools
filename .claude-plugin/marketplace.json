@@ -13,7 +13,7 @@
     { "name": "analyze", "source": "./plugins/analyze", "description": "Strategic architecture and codebase analysis: tech debt, scalability, and long-term fit.", "version": "1.0.0" },
     { "name": "challenge", "source": "./plugins/challenge", "description": "Adversarial pushback on claims, prior answers, and assumptions that may not hold.", "version": "1.0.0" },
     { "name": "chat", "source": "./plugins/chat", "description": "Collaborative technical brainstorming and discussion of engineering decisions.", "version": "1.0.0" },
-    { "name": "clink", "source": "./plugins/clink", "description": "Delegate a task to Gemini, Claude, or Codex CLI for a second-model opinion.", "version": "1.0.0" },
+    { "name": "clink", "source": "./plugins/clink", "description": "Delegate a task to Gemini, Claude, Codex, or Cursor CLI for a second-model opinion.", "version": "1.0.0" },
     { "name": "codereview", "source": "./plugins/codereview", "description": "Code and PR review for bugs, quality issues, and maintainability problems.", "version": "1.0.0" },
     { "name": "consensus", "source": "./plugins/consensus", "description": "Evaluate proposals and compare approaches from multiple perspectives.", "version": "1.0.0" },
     { "name": "debug", "source": "./plugins/debug", "description": "Root-cause analysis for bugs, crashes, failing tests, and unexpected behavior.", "version": "1.0.0" },

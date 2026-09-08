@@ -134,7 +134,7 @@ You can also paste `https://github.com/walac/my-ai-tools` into plugin search to 
 | `analyze` | 1.0.0 | Skill | Architecture and codebase assessment |
 | `challenge` | 1.0.0 | Skill | Adversarial pushback on claims |
 | `chat` | 1.0.0 | Skill | Technical brainstorming and discussion |
-| `clink` | 1.0.0 | Skill | Delegate to Gemini, Claude, or Codex CLI |
+| `clink` | 1.0.0 | Skill | Delegate to Gemini, Claude, Codex, or Cursor CLI |
 | `codereview` | 1.0.0 | Skill | Code and PR review |
 | `consensus` | 1.0.0 | Skill | Compare approaches and trade-offs |
 | `debug` | 1.0.0 | Skill | Root-cause analysis |

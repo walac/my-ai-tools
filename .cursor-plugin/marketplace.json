@@ -56,7 +56,7 @@
       "name": "clink",
       "source": "clink",
       "version": "1.0.0",
-      "description": "Delegate a task to Gemini, Claude, or Codex CLI for a second-model opinion."
+      "description": "Delegate a task to Gemini, Claude, Codex, or Cursor CLI for a second-model opinion."
     },
     {
       "name": "codereview",
