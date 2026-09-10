@@ -55,21 +55,21 @@ def heading_text_without_slug(raw: str) -> str:
     return SLUG_RE.sub("", raw).strip()
 
 
-def symbol_reference(text_label: str, relpath: str) -> tuple[str, str] | None:
-    """Return ``(bare_identifier, consistency_key)`` for a symbol link.
+def symbol_reference(text_label: str, relpath: str) -> str | None:
+    """Return the bare identifier for a symbol link, or None for a file link.
 
     A label matching the linked file's basename is a deliberate whole-file
     reference, even when the basename is identifier-shaped (for example,
-    ``Makefile``).  Keyword-prefixed C types retain their kind in the
-    consistency key, while source-line checks use the bare identifier.
+    ``Makefile``).  Keyword-prefixed C types (``struct foo``) still yield
+    the bare identifier for source-line checks.
     """
     cleaned = text_label.strip().strip("`").rstrip("()")
     if cleaned == Path(relpath).name:
         return None
     if IDENT_RE.match(cleaned):
-        return cleaned, cleaned
+        return cleaned
     m = SYMBOL_KEYWORD_RE.match(cleaned)
-    return (m.group(1), cleaned) if m else None
+    return m.group(1) if m else None
 
 
 def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
@@ -138,7 +138,6 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 errors.append(f"{path}:{lineno}: .secref target {{#{slug}}} does not exist")
 
     versions: set[str] = set()
-    symbol_urls: dict[str, str] = {}
     for lineno, line, in_code in rows:
         if in_code:
             continue
@@ -153,27 +152,13 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 if not src.is_file():
                     errors.append(f"{path}:{lineno}: elixir path not in tree: {relpath}")
                     continue
-            symbol = symbol_reference(text_label, relpath)
+            ident = symbol_reference(text_label, relpath)
             if not hashpart or not linenum:
-                if symbol:
+                if ident:
                     errors.append(
                         f"{path}:{lineno}: symbol elixir link has no #L<number>: {url}"
                     )
                 continue
-            if symbol:
-                ident, symbol_key = symbol
-                prev_url = symbol_urls.get(symbol_key)
-                # Compare path+#L, ignore version drift separately.
-                key = f"{relpath}#L{linenum}"
-                if prev_url and prev_url != key:
-                    errors.append(
-                        f"{path}:{lineno}: {symbol_key} links to {key} but earlier "
-                        f"linked to {prev_url}"
-                    )
-                else:
-                    symbol_urls[symbol_key] = key
-            else:
-                ident = None
             if tree is None:
                 continue
             src_lines = src.read_text(encoding="utf-8", errors="replace").splitlines()

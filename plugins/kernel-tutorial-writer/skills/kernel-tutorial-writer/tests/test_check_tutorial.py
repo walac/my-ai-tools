@@ -88,7 +88,26 @@ The only type is [`struct fake_key`](https://elixir.bootlin.com/linux/v6.16/sour
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("symbol elixir link has no #L<number>", result.stdout)
 
-    def test_keeps_type_and_ordinary_symbols_in_separate_consistency_namespaces(self) -> None:
+    def test_allows_same_symbol_at_different_source_locations(self) -> None:
+        """A later mention may point at a call site, declaration, or other file."""
+        tutorial = """## API {#api}
+
+[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11)
+is invoked from [`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L8).
+"""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "tutorial.md"
+            path.write_text(tutorial, encoding="utf-8")
+            result = subprocess.run(
+                [str(CHECKER), str(path), "--tree", str(TREE)],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_allows_struct_tag_and_ordinary_symbol_with_the_same_spelling(self) -> None:
         """A struct tag and an ordinary C symbol may share a spelling."""
         tutorial = """## API {#api}
 

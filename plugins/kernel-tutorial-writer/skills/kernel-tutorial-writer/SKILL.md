@@ -106,8 +106,7 @@ Do link: first mention in each new paragraph; every occurrence in a passage that
 ### Line numbers
 
 - Symbol links have `#L<number>`. A bare URL is fine when the link deliberately refers to a whole file, such as an in-tree document or a file in “Further reading”.
-- `#L` is the definition line (signature, `struct`/`typedef`, `#define`). Confirm against the file on disk, not memory.
-- Same symbol → same line number everywhere. Later mentions must not drift.
+- `#L` is the line being discussed. Prefer the definition (signature, `struct`/`typedef`, `#define`); a later mention may point at a call site, a declaration, or another file when that is the occurrence under discussion. Confirm against the file on disk, not memory.
 - Nearby names (`foo` vs `foo_bar`): confirm the line is the one being discussed.
 
 ## Style
