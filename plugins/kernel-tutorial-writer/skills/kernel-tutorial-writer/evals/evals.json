@@ -14,7 +14,7 @@
         "check-tutorial reports 0 errors against the mini-kernel tree",
         "No numbered headings",
         "Every heading has a {#slug}",
-        "Every elixir link has #L and that line contains the linked symbol",
+        "Every symbol elixir link has #L and that line contains the linked symbol",
         "All elixir links use the same version prefix",
         "Every .secref target exists"
       ]

@@ -105,7 +105,7 @@ Do link: first mention in each new paragraph; every occurrence in a passage that
 
 ### Line numbers
 
-- Every elixir link has `#L<number>`. A bare file URL dumps the reader at line 1 of a huge file.
+- Symbol links have `#L<number>`. A bare URL is fine when the link deliberately refers to a whole file, such as an in-tree document or a file in “Further reading”.
 - `#L` is the definition line (signature, `struct`/`typedef`, `#define`). Confirm against the file on disk, not memory.
 - Same symbol → same line number everywhere. Later mentions must not drift.
 - Nearby names (`foo` vs `foo_bar`): confirm the line is the one being discussed.

@@ -22,6 +22,7 @@ SECREF_RE = re.compile(r"\[\]\(#([a-z0-9-]+)\)\{\.secref\}")
 ELIXIR_RE = re.compile(r"https://elixir\.bootlin\.com/linux/([^/\s)]+)/source/([^)\s#]+)(#L(\d+))?")
 MD_LINK_RE = re.compile(r"\[([^\]]*)\]\((https://elixir\.bootlin\.com/linux/[^)]+)\)")
 IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+SYMBOL_KEYWORD_RE = re.compile(r"^(?:struct|enum|union|typedef)\s+([A-Za-z_][A-Za-z0-9_]*)$")
 POSSESSIVE_RE = re.compile(r"\b([A-Za-z][A-Za-z0-9_]*)'s\b")
 CONTRACTIONS = {
     "it's",
@@ -52,6 +53,23 @@ def strip_fences(text: str) -> list[tuple[int, str, bool]]:
 
 def heading_text_without_slug(raw: str) -> str:
     return SLUG_RE.sub("", raw).strip()
+
+
+def symbol_reference(text_label: str, relpath: str) -> tuple[str, str] | None:
+    """Return ``(bare_identifier, consistency_key)`` for a symbol link.
+
+    A label matching the linked file's basename is a deliberate whole-file
+    reference, even when the basename is identifier-shaped (for example,
+    ``Makefile``).  Keyword-prefixed C types retain their kind in the
+    consistency key, while source-line checks use the bare identifier.
+    """
+    cleaned = text_label.strip().strip("`").rstrip("()")
+    if cleaned == Path(relpath).name:
+        return None
+    if IDENT_RE.match(cleaned):
+        return cleaned, cleaned
+    m = SYMBOL_KEYWORD_RE.match(cleaned)
+    return (m.group(1), cleaned) if m else None
 
 
 def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
@@ -130,26 +148,33 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 continue
             version, relpath, hashpart, linenum = em.group(1), em.group(2), em.group(3), em.group(4)
             versions.add(version)
+            if tree is not None:
+                src = tree / relpath
+                if not src.is_file():
+                    errors.append(f"{path}:{lineno}: elixir path not in tree: {relpath}")
+                    continue
+            symbol = symbol_reference(text_label, relpath)
             if not hashpart or not linenum:
-                errors.append(f"{path}:{lineno}: elixir link has no #L<number>: {url}")
+                if symbol:
+                    errors.append(
+                        f"{path}:{lineno}: symbol elixir link has no #L<number>: {url}"
+                    )
                 continue
-            ident = text_label.strip().strip("`").rstrip("()")
-            if IDENT_RE.match(ident):
-                prev_url = symbol_urls.get(ident)
+            if symbol:
+                ident, symbol_key = symbol
+                prev_url = symbol_urls.get(symbol_key)
                 # Compare path+#L, ignore version drift separately.
                 key = f"{relpath}#L{linenum}"
                 if prev_url and prev_url != key:
                     errors.append(
-                        f"{path}:{lineno}: {ident} links to {key} but earlier "
+                        f"{path}:{lineno}: {symbol_key} links to {key} but earlier "
                         f"linked to {prev_url}"
                     )
                 else:
-                    symbol_urls[ident] = key
+                    symbol_urls[symbol_key] = key
+            else:
+                ident = None
             if tree is None:
-                continue
-            src = tree / relpath
-            if not src.is_file():
-                errors.append(f"{path}:{lineno}: elixir path not in tree: {relpath}")
                 continue
             src_lines = src.read_text(encoding="utf-8", errors="replace").splitlines()
             n = int(linenum)
@@ -159,7 +184,7 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 )
                 continue
             target = src_lines[n - 1]
-            if IDENT_RE.match(ident) and ident not in target:
+            if ident and ident not in target:
                 errors.append(
                     f"{path}:{lineno}: {relpath}#L{n} does not contain {ident!r}: "
                     f"{target.rstrip()!r}"
