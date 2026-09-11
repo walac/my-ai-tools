@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "The current directory is a small Linux-like tree (Makefile with VERSION/PATCHLEVEL, include/linux/, kernel/, init/, Documentation/). There is a broken tutorial at evals/files/broken-tutorial.md (copied next to you as broken-tutorial.md). Fix it in place so it becomes a valid kernel tutorial for the fake_key mechanism in this tree: elixir links with verified #L against files on disk, {#slug} on every heading, no numbers in headings, --- before every ## except the first, .secref targets that exist, no possessive 's, one elixir version prefix (v6.16). Write the result to outputs/fake_key.md.",
+      "prompt": "The current directory is a small Linux-like tree (Makefile with VERSION/PATCHLEVEL, include/linux/, kernel/, init/, Documentation/). There is a broken tutorial at evals/files/broken-tutorial.md (also copied into CWD as broken-tutorial.md). Rewrite it into a valid kernel tutorial for the fake_key mechanism and write the result to outputs/fake_key.md: symbol elixir links with verified #L against files on disk, in-tree file paths linked (whole-file links may omit #L), each symbol elixir-linked only on first mention per subsection, {#slug} on every ##–###### heading, no numbers in headings, --- before every ## except the first, .secref targets that exist, no possessive 's, one elixir version prefix (v6.16).",
       "expected_output": "A Markdown tutorial at outputs/fake_key.md that passes scripts/check-tutorial --tree <mini-kernel>",
       "files": [
         "evals/files/mini-kernel",
@@ -15,8 +15,11 @@
         "No numbered headings",
         "Every heading has a {#slug}",
         "Every symbol elixir link has #L and that line contains the linked symbol",
+        "Whole-file elixir links may omit #L",
         "All elixir links use the same version prefix",
-        "Every .secref target exists"
+        "Every .secref target exists",
+        "In-tree file paths mentioned in prose are elixir links",
+        "A given symbol is elixir-linked at most once per ##/### subsection"
       ]
     },
     {
@@ -30,7 +33,9 @@
         "Mentions fake_key_enable, fake_key_disable, fake_key_init, and early_boot_setup",
         "Grounds the init-ordering invariant in early_boot_setup (a Concretely: call site)",
         "Has a Further reading in-tree section",
-        "Does not invent files that are not in this tree"
+        "Does not invent files that are not in this tree",
+        "In-tree file paths (e.g. Documentation/core-api/fake_key.rst) are elixir links",
+        "A given symbol is elixir-linked at most once per ##/### subsection"
       ]
     },
     {

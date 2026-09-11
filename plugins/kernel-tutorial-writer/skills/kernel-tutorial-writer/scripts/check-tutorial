@@ -23,6 +23,7 @@ ELIXIR_RE = re.compile(r"https://elixir\.bootlin\.com/linux/([^/\s)]+)/source/([
 MD_LINK_RE = re.compile(r"\[([^\]]*)\]\((https://elixir\.bootlin\.com/linux/[^)]+)\)")
 IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 SYMBOL_KEYWORD_RE = re.compile(r"^(?:struct|enum|union|typedef)\s+([A-Za-z_][A-Za-z0-9_]*)$")
+FILE_PATH_RE = re.compile(r"(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]*[A-Za-z0-9_-]")
 POSSESSIVE_RE = re.compile(r"\b([A-Za-z][A-Za-z0-9_]*)'s\b")
 CONTRACTIONS = {
     "it's",
@@ -70,6 +71,32 @@ def symbol_reference(text_label: str, relpath: str) -> str | None:
         return cleaned
     m = SYMBOL_KEYWORD_RE.match(cleaned)
     return m.group(1) if m else None
+
+
+def symbol_identity(text_label: str, relpath: str) -> str | None:
+    """Return the namespace-preserving identity of a symbol link.
+
+    File labels remain file references even when their basename looks like a C
+    identifier.  Unlike ``symbol_reference()``, a tagged C type retains its
+    keyword so ``struct foo`` and ``foo()`` do not collide.
+    """
+    cleaned = text_label.strip().strip("`").rstrip("()")
+    if cleaned == Path(relpath).name:
+        return None
+    if IDENT_RE.match(cleaned) or SYMBOL_KEYWORD_RE.match(cleaned):
+        return cleaned
+    return None
+
+
+def elixir_link_spans(line: str) -> list[tuple[int, int]]:
+    """Return spans occupied by raw URLs or Markdown Elixir links."""
+    spans = [m.span() for m in ELIXIR_RE.finditer(line)]
+    spans.extend(m.span() for m in MD_LINK_RE.finditer(line))
+    return spans
+
+
+def overlaps(start: int, end: int, spans: list[tuple[int, int]]) -> bool:
+    return any(start < b and end > a for a, b in spans)
 
 
 def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
@@ -138,10 +165,26 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 errors.append(f"{path}:{lineno}: .secref target {{#{slug}}} does not exist")
 
     versions: set[str] = set()
+    symbol_urls: dict[str, str] = {}
+    # (h2 slug, h3 slug) → ident → (first link lineno, 1-based column)
+    linked_in_sub: dict[tuple[str | None, str | None], dict[str, tuple[int, int]]] = {}
+    sub_key: tuple[str | None, str | None] = (None, None)
+
     for lineno, line, in_code in rows:
         if in_code:
             continue
-        for text_label, url in MD_LINK_RE.findall(line):
+        hm = HEADING_RE.match(line)
+        if hm:
+            hashes, rest = hm.group(1), hm.group(2)
+            slug_m = SLUG_RE.search(rest)
+            slug = slug_m.group(1) if slug_m else None
+            if hashes == "##":
+                sub_key = (slug, None)
+            elif hashes == "###":
+                sub_key = (sub_key[0], slug)
+        link_spans = elixir_link_spans(line)
+        for lm in MD_LINK_RE.finditer(line):
+            text_label, url = lm.group(1), lm.group(2)
             em = ELIXIR_RE.search(url)
             if not em:
                 continue
@@ -152,13 +195,39 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 if not src.is_file():
                     errors.append(f"{path}:{lineno}: elixir path not in tree: {relpath}")
                     continue
-            ident = symbol_reference(text_label, relpath)
+            source_ident = symbol_reference(text_label, relpath)
             if not hashpart or not linenum:
-                if ident:
+                if source_ident:
                     errors.append(
                         f"{path}:{lineno}: symbol elixir link has no #L<number>: {url}"
                     )
                 continue
+            ident = symbol_identity(text_label, relpath)
+            duplicate = False
+            if ident:
+                seen = linked_in_sub.setdefault(sub_key, {})
+                col = lm.start() + 1
+                if ident in seen:
+                    duplicate = True
+                    prev_ln, prev_col = seen[ident]
+                    if prev_ln == lineno:
+                        where = f"earlier on this line (col {prev_col})"
+                    else:
+                        where = f"in this subsection (line {prev_ln} col {prev_col})"
+                    errors.append(
+                        f"{path}:{lineno}: {ident} already elixir-linked {where}; "
+                        "later mentions stay unlinked"
+                    )
+                else:
+                    seen[ident] = (lineno, col)
+                # Compare path+#L, ignore version drift separately.
+                key = f"{relpath}#L{linenum}"
+                prev_url = symbol_urls.setdefault(ident, key)
+                if prev_url != key:
+                    errors.append(
+                        f"{path}:{lineno}: {ident} elixir link drifts from "
+                        f"{prev_url} to {key}"
+                    )
             if tree is None:
                 continue
             src_lines = src.read_text(encoding="utf-8", errors="replace").splitlines()
@@ -169,11 +238,20 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 )
                 continue
             target = src_lines[n - 1]
-            if ident and ident not in target:
+            # Duplicate links are already an error; do not re-report #L mismatch.
+            if source_ident and source_ident not in target and not duplicate:
                 errors.append(
-                    f"{path}:{lineno}: {relpath}#L{n} does not contain {ident!r}: "
+                    f"{path}:{lineno}: {relpath}#L{n} does not contain {source_ident!r}: "
                     f"{target.rstrip()!r}"
                 )
+        if tree is not None:
+            for pm in FILE_PATH_RE.finditer(line):
+                rel = pm.group(0)
+                if overlaps(pm.start(), pm.end(), link_spans):
+                    continue
+                src = tree / rel
+                if src.is_file():
+                    errors.append(f"{path}:{lineno}: in-tree path {rel} is not an elixir link")
 
     if len(versions) > 1:
         errors.append(

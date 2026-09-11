@@ -4,7 +4,7 @@ A counted on/off switch in this fixture tree. The first enable may patch text; n
 
 ## Overview {#overview}
 
-The mechanism is a counter plus an updater. [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) and [fake_key_disable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L19) change the count; [fake_key_update()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L27) is what would patch sites once [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6) has marked the table ready.
+The mechanism is a counter plus an updater. [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) and [fake_key_disable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L19) change the count. Once [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6) has marked the table ready, [fake_key_update()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L27) is what would patch sites.
 
 ---
 
@@ -16,7 +16,7 @@ The only type is [`struct fake_key`](https://elixir.bootlin.com/linux/v6.16/sour
 
 ## Enabling a key {#enabling-a-key}
 
-Turning a key on is a counted transition. Here is what [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) does, one step at a time.
+Turning a key on is a counted transition, not a boolean flip. Here is what [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) does, one step at a time.
 
 **1. Bump the counter.**
 
@@ -24,7 +24,7 @@ Turning a key on is a counted transition. Here is what [fake_key_enable()](https
 int count = atomic_inc_return(&key->enabled);
 ```
 
-The increment is the commit point.
+The increment is the commit point. Everything after this line is looking at a count other CPUs can already observe.
 
 **2. Patch on the 0 → 1 edge, and only if init already ran.**
 
@@ -33,7 +33,9 @@ if (count == 1 && fake_key_ready)
     fake_key_update(key, true);
 ```
 
-Concretely: [early_boot_setup()](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L6) calls [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) during boot. If that call happens before [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6), `fake_key_ready` is still false and the updater is skipped.
+Building the update around that edge, rather than around "the key is on", is what keeps a nested enable from patching twice.
+
+Concretely: [early_boot_setup()](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L6) calls `fake_key_enable()` during boot. If that call happens before [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6), [`fake_key_ready`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L3) is still false and the updater is skipped.
 
 The disable path in [](#disabling-a-key){.secref} is the 1 → 0 mirror.
 
@@ -48,4 +50,5 @@ The disable path in [](#disabling-a-key){.secref} is the 1 → 0 mirror.
 ## Further reading in-tree {#further-reading-in-tree}
 
 - [fake_key_enabled()](https://elixir.bootlin.com/linux/v6.16/source/include/linux/fake_key.h#L10) — the read-side helper
-- `Documentation/core-api/fake_key.rst` — the in-tree note
+- [`Documentation/core-api/fake_key.rst`](https://elixir.bootlin.com/linux/v6.16/source/Documentation/core-api/fake_key.rst) — the in-tree note
+- [`kernel/fake_key.c`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c) — enable, disable, and the updater
