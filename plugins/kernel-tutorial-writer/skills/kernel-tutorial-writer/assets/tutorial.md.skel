@@ -1,31 +1,3 @@
 # TITLE
 
-What this mechanism is, why it exists, and what the reader will be able to follow in the tree after this document. Kernel version the text is based on.
-
-## Overview {#overview}
-
-The shape of the mechanism in one short paragraph before any listing.
-
----
-
-## Hardware background {#hardware-background}
-
-Include this section only when the topic needs micro-architecture the reader cannot be assumed to have (instruction encoding, cache coherency, exception frames, TLB). Otherwise delete it, including the `---` above.
-
----
-
-## Data structures {#data-structures}
-
-The structs and tables the rest of the document keeps pointing at.
-
----
-
-## Life of a … {#life-of-a}
-
-The sequence from init through the interesting runtime path.
-
----
-
-## Further reading in-tree {#further-reading-in-tree}
-
-Where to go next. A handful of files and functions, each with a one-line reason.
+## Replace-this-heading {#replace-this-heading}

@@ -31,8 +31,9 @@ class CheckTutorialTests(unittest.TestCase):
                 target.write_text(file_text, encoding="utf-8")
             draft = root / "tutorial.md"
             draft.write_text(tutorial, encoding="utf-8")
+            command = [sys.executable, str(CHECKER), str(draft), "--tree", str(root)]
             result = subprocess.run(
-                [sys.executable, str(CHECKER), str(draft), "--tree", str(root)],
+                command,
                 check=False,
                 capture_output=True,
                 text=True,
@@ -43,7 +44,9 @@ class CheckTutorialTests(unittest.TestCase):
 
     def test_allows_file_level_elixir_link_without_line_anchor(self) -> None:
         """A documentation-file reference need not pretend to name a symbol."""
-        tutorial = """## Further reading {#further-reading}
+        tutorial = """# Tutorial
+
+## Further reading {#further-reading}
 
 Read [the fake-key documentation](https://elixir.bootlin.com/linux/v6.16/source/Documentation/core-api/fake_key.rst).
 """
@@ -61,7 +64,9 @@ Read [the fake-key documentation](https://elixir.bootlin.com/linux/v6.16/source/
 
     def test_allows_identifier_named_file_link_without_line_anchor(self) -> None:
         """A whole-file link may use the file's identifier-shaped basename."""
-        tutorial = """## Further reading {#further-reading}
+        tutorial = """# Tutorial
+
+## Further reading {#further-reading}
 
 Read the [Makefile](https://elixir.bootlin.com/linux/v6.16/source/Makefile).
 """
@@ -79,7 +84,9 @@ Read the [Makefile](https://elixir.bootlin.com/linux/v6.16/source/Makefile).
 
     def test_still_rejects_symbol_link_without_line_anchor(self) -> None:
         """The relaxation must not swallow the case it was meant to keep failing."""
-        tutorial = """## Overview {#overview}
+        tutorial = """# Tutorial
+
+## Overview {#overview}
 
 The [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c) function turns the key on.
 """
@@ -116,8 +123,10 @@ The only type is [`struct fake_key`](https://elixir.bootlin.com/linux/v6.16/sour
         self.assertIn("symbol elixir link has no #L<number>", result.stdout)
 
     def test_allows_unlinked_later_mention_in_the_same_subsection(self) -> None:
-        """Only the first symbol mention in a subsection carries an Elixir link."""
-        tutorial = """## API {#api}
+        """An unlinked later mention remains valid regardless of link density."""
+        tutorial = """# Tutorial
+
+## API {#api}
 
 [`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11)
 is invoked during boot through `fake_key_enable()`.
@@ -134,35 +143,52 @@ is invoked during boot through `fake_key_enable()`.
 
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def test_rejects_symbol_link_drift_across_subsections(self) -> None:
-        """Re-linking a symbol elsewhere must retain its original source line."""
-        tutorial = """## API {#api}
+    def test_allows_same_symbol_spelling_in_distinct_definitions(self) -> None:
+        """Link choices must not assume an identifier has one global definition."""
+        tutorial = """# Tutorial
 
-[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11)
-enables the key.
+## API {#api}
+
+[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1)
+is one definition.
 
 ---
 ## Boot {#boot}
 
-[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L2)
-is called during early boot.
+[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L1)
+is another definition with the same spelling.
 """
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = Path(tmpdir) / "tutorial.md"
-            path.write_text(tutorial, encoding="utf-8")
-            result = subprocess.run(
-                [str(CHECKER), str(path), "--tree", str(TREE)],
-                text=True,
-                capture_output=True,
-                check=False,
-            )
+        output = self.run_checker(
+            tutorial,
+            ("kernel/fake_key.c", "init/main.c"),
+            expect_errors=False,
+            file_text="void fake_key_enable(void) {}\n",
+        )
+        self.assertIn("0 error(s)", output)
 
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("fake_key_enable elixir link drifts", result.stdout)
+    def test_allows_same_symbol_spelling_for_distinct_definitions_in_subsection(self) -> None:
+        """Duplicate checks distinguish definitions, not only their spelling."""
+        tutorial = """# Tutorial
+
+## Architecture comparison {#architecture-comparison}
+
+[`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1)
+is the generic definition. [`fake_key_enable()`](https://elixir.bootlin.com/linux/v6.16/source/init/main.c#L1)
+is the architecture-specific definition.
+"""
+        output = self.run_checker(
+            tutorial,
+            ("kernel/fake_key.c", "init/main.c"),
+            expect_errors=False,
+            file_text="void fake_key_enable(void) {}\n",
+        )
+        self.assertIn("0 error(s)", output)
 
     def test_allows_struct_tag_and_ordinary_symbol_with_the_same_spelling(self) -> None:
         """A struct tag and an ordinary C symbol may share a spelling."""
-        tutorial = """## API {#api}
+        tutorial = """# Tutorial
+
+## API {#api}
 
 The [`struct foo`](https://elixir.bootlin.com/linux/v6.16/source/example.c#L1)
 type is passed to [`foo()`](https://elixir.bootlin.com/linux/v6.16/source/example.c#L4).
@@ -253,8 +279,7 @@ See kernel/fake_key.c.
         )
         self.assertIn("in-tree path kernel/fake_key.c is not an elixir link", output)
 
-    def test_rejects_second_elixir_link_for_symbol_in_subsection(self) -> None:
-        # Two elixir links to the same ident under one ## must fail even when #L is valid.
+    def test_rejects_repeated_elixir_links_for_a_symbol(self) -> None:
         output = self.run_checker(
             """# Tutorial
 
@@ -262,7 +287,7 @@ See kernel/fake_key.c.
 
 [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1)
 later [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1)
-""",
+            """,
             ("kernel/fake_key.c",),
             file_text="void fake_key_enable(void)\n",
         )
@@ -271,22 +296,161 @@ later [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/f
             output,
         )
 
-    def test_same_line_duplicate_link_names_first_column(self) -> None:
-        # Same-line duplicates should point at the first link's column, not re-emit #L mismatch.
+    def test_requires_kernel_tutorial_section_structure(self) -> None:
         output = self.run_checker(
-            """# Tutorial
+            """# Fake keys
+
+An explanation organized around the requested call path.
+
+## 1 The call path
+
+The caller reaches the update path after incrementing the counter.
+
+### Why the order matters
+
+The update observes the completed transition.
+
+## Where the state lives
+
+The state is shared by all callers.
+""",
+            (),
+        )
+        self.assertIn("heading has a section number", output)
+        self.assertIn("heading missing {#slug}", output)
+        self.assertIn("is not preceded by ---", output)
+
+    def test_warns_about_possessive_prose(self) -> None:
+        output = self.run_checker(
+            """# Fake keys
+
+The mechanism's counter is shared between callers.
+
+## State {#state}
+
+The key's state changes on the boundary transition.
+""",
+            (),
+            expect_errors=False,
+        )
+        self.assertIn("2 warning(s)", output)
+        self.assertIn('possessive "mechanism\'s"', output)
+        self.assertIn('possessive "key\'s"', output)
+
+    def test_requires_document_title_on_first_line(self) -> None:
+        output = self.run_checker(
+            """An explanation organized around the requested call path.
+
+## Where the state lives {#where-the-state-lives}
+
+The state is shared by all callers.
+""",
+            (),
+        )
+        self.assertIn("first line must be a document-title H1", output)
+
+    def test_rejects_slug_on_document_title(self) -> None:
+        output = self.run_checker(
+            """# Fake keys {#fake-keys}
+
+## State {#state}
+
+The state is shared by all callers.
+""",
+            (),
+        )
+        self.assertIn("document-title H1 must not have a {#slug}", output)
+
+    def test_rejects_unfilled_skeleton_markers(self) -> None:
+        output = self.run_checker(
+            """# TITLE
+
+## Replace-this-heading {#replace-this-heading}
+
+Tutorial text.
+""",
+            (),
+        )
+        self.assertIn("leftover skeleton title", output)
+        self.assertIn("leftover skeleton heading", output)
+
+    def test_topic_shaped_headings_without_canned_toc_pass(self) -> None:
+        """The checker must not require Overview / Data structures / Life of a …"""
+        output = self.run_checker(
+            """# Fake keys
+
+A counted switch.
+
+## Enabling a key {#enabling-a-key}
+
+Framing for the enable path.
+
+---
+
+## Poll budget {#poll-budget}
+
+Framing for a topic-shaped middle section.
+
+---
+
+## Further reading in-tree {#further-reading-in-tree}
+
+Next files.
+""",
+            (),
+            expect_errors=False,
+        )
+        self.assertIn("0 error(s)", output)
+
+    def test_single_h2_without_further_reading_passes(self) -> None:
+        """A usage-only walk may be one H2; a closer is not a mechanical rule."""
+        output = self.run_checker(
+            """# Fake keys
+
+A counted switch.
+
+## Enabling a key {#enabling-a-key}
+
+Framing for a usage-only walk.
+""",
+            (),
+            expect_errors=False,
+        )
+        self.assertIn("0 error(s)", output)
+
+    def test_canned_toc_titles_are_allowed(self) -> None:
+        """Overview-style titles are not banned; they are also not required."""
+        output = self.run_checker(
+            """# Fake keys
+
+A counted switch.
 
 ## Overview {#overview}
 
-[fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1) and [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L1)
+Framing.
+
+---
+
+## Data structures {#data-structures}
+
+Framing.
 """,
-            ("kernel/fake_key.c",),
+            (),
+            expect_errors=False,
         )
-        self.assertIn(
-            "fake_key_enable already elixir-linked earlier on this line (col 1)",
-            output,
+        self.assertIn("0 error(s)", output)
+
+    def test_broken_tutorial_fails(self) -> None:
+        broken = SKILL_DIR / "evals" / "files" / "broken-tutorial.md"
+        result = subprocess.run(
+            [sys.executable, str(CHECKER), str(broken), "--tree", str(TREE)],
+            check=False,
+            capture_output=True,
+            text=True,
         )
-        self.assertEqual(output.count("does not contain 'fake_key_enable'"), 1)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("heading has a section number", result.stdout)
+        self.assertIn("heading missing {#slug}", result.stdout)
 
     def test_golden_tutorial_passes(self) -> None:
         # The checked-in specimen must stay a clean success against the mini-kernel tree.

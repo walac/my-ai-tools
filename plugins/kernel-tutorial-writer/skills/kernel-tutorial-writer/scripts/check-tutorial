@@ -37,6 +37,7 @@ CONTRACTIONS = {
     "she's",
     "they're",  # not 's but keep the set tight
 }
+PLACEHOLDER_SLUGS = {"replace-this-heading"}
 
 
 def strip_fences(text: str) -> list[tuple[int, str, bool]]:
@@ -105,6 +106,15 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
     text = path.read_text(encoding="utf-8")
     rows = strip_fences(text)
 
+    first_line = text.splitlines()[0] if text.splitlines() else ""
+    title = re.match(r"^#(?!#)\s+(.+?)\s*$", first_line)
+    if title is None:
+        errors.append(f"{path}:1: first line must be a document-title H1")
+    elif SLUG_RE.search(title.group(1)):
+        errors.append(f"{path}:1: document-title H1 must not have a {{#slug}}")
+    elif heading_text_without_slug(title.group(1)) == "TITLE":
+        errors.append(f"{path}:1: leftover skeleton title '# TITLE'")
+
     headings: list[tuple[int, str, str, str | None]] = []
     # (lineno, hashes, display_text, slug)
     for lineno, line, in_code in rows:
@@ -124,6 +134,8 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
     for lineno, hashes, display, slug in headings:
         if hashes == "##" and first_h2 is None:
             first_h2 = lineno
+        if slug in PLACEHOLDER_SLUGS or display.lower() in PLACEHOLDER_SLUGS:
+            errors.append(f"{path}:{lineno}: leftover skeleton heading {display!r}")
         if NUMBERED_HEADING_RE.match(display):
             errors.append(
                 f"{path}:{lineno}: heading has a section number "
@@ -131,11 +143,11 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
             )
         if slug is None:
             errors.append(f"{path}:{lineno}: heading missing {{#slug}}: {display!r}")
-        elif slug in slugs:
+        elif slug is not None and slug in slugs:
             errors.append(
                 f"{path}:{lineno}: duplicate slug {{#{slug}}} " f"(also line {slugs[slug]})"
             )
-        else:
+        elif slug is not None:
             slugs[slug] = lineno
 
     # --- before every ## except the first
@@ -165,9 +177,11 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                 errors.append(f"{path}:{lineno}: .secref target {{#{slug}}} does not exist")
 
     versions: set[str] = set()
-    symbol_urls: dict[str, str] = {}
-    # (h2 slug, h3 slug) → ident → (first link lineno, 1-based column)
-    linked_in_sub: dict[tuple[str | None, str | None], dict[str, tuple[int, int]]] = {}
+    # (h2 slug, h3 slug) → (ident, path, definition line) → link location
+    linked_in_sub: dict[
+        tuple[str | None, str | None],
+        dict[tuple[str, str, str], tuple[int, int]],
+    ] = {}
     sub_key: tuple[str | None, str | None] = (None, None)
 
     for lineno, line, in_code in rows:
@@ -207,9 +221,10 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
             if ident:
                 seen = linked_in_sub.setdefault(sub_key, {})
                 col = lm.start() + 1
-                if ident in seen:
+                definition = (ident, relpath, linenum)
+                if definition in seen:
                     duplicate = True
-                    prev_ln, prev_col = seen[ident]
+                    prev_ln, prev_col = seen[definition]
                     if prev_ln == lineno:
                         where = f"earlier on this line (col {prev_col})"
                     else:
@@ -219,15 +234,7 @@ def check(path: Path, tree: Path | None) -> tuple[list[str], list[str]]:
                         "later mentions stay unlinked"
                     )
                 else:
-                    seen[ident] = (lineno, col)
-                # Compare path+#L, ignore version drift separately.
-                key = f"{relpath}#L{linenum}"
-                prev_url = symbol_urls.setdefault(ident, key)
-                if prev_url != key:
-                    errors.append(
-                        f"{path}:{lineno}: {ident} elixir link drifts from "
-                        f"{prev_url} to {key}"
-                    )
+                    seen[definition] = (lineno, col)
             if tree is None:
                 continue
             src_lines = src.read_text(encoding="utf-8", errors="replace").splitlines()

@@ -2,15 +2,9 @@
 
 A counted on/off switch in this fixture tree. The first enable may patch text; nested enables only move the counter. Written against v6.16 of this tree.
 
-## Overview {#overview}
+## The enabled counter {#the-enabled-counter}
 
-The mechanism is a counter plus an updater. [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) and [fake_key_disable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L19) change the count. Once [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6) has marked the table ready, [fake_key_update()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L27) is what would patch sites.
-
----
-
-## Data structures {#data-structures}
-
-The only type is [`struct fake_key`](https://elixir.bootlin.com/linux/v6.16/source/include/linux/fake_key.h#L6), which holds an `enabled` counter.
+The only type is [`struct fake_key`](https://elixir.bootlin.com/linux/v6.16/source/include/linux/fake_key.h#L6), which holds an `enabled` counter. [fake_key_enable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L11) and [fake_key_disable()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L19) change that count. Once [fake_key_init()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L6) has marked the table ready, [fake_key_update()](https://elixir.bootlin.com/linux/v6.16/source/kernel/fake_key.c#L27) is what would patch sites.
 
 ---
 

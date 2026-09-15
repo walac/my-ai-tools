@@ -12,8 +12,8 @@
       "expectations": [
         "Wrote outputs/fake_key.md",
         "check-tutorial reports 0 errors against the mini-kernel tree",
-        "No numbered headings",
-        "Every heading has a {#slug}",
+        "First line is an H1 title without a slug; every subordinate heading has an unnumbered unique slug",
+        "Every H2 after the first is preceded by --- and every .secref target exists",
         "Every symbol elixir link has #L and that line contains the linked symbol",
         "Whole-file elixir links may omit #L",
         "All elixir links use the same version prefix",
@@ -24,18 +24,19 @@
     },
     {
       "id": 2,
-      "prompt": "The current directory is a small Linux-like tree (Makefile VERSION 6 PATCHLEVEL 16, include/linux/, kernel/fake_key.c, init/main.c, Documentation/core-api/fake_key.rst). Write a short standalone Markdown tutorial on the fake_key mechanism for a competent C programmer who has not seen this code. Cover overview, the enable/disable counted-edge rule, the early_boot_setup vs fake_key_init ordering, and further reading. Save it to outputs/fake_key.md. Do not dump the tutorial only in chat.",
+      "prompt": "The current directory is a small Linux-like tree (Makefile VERSION 6 PATCHLEVEL 16, include/linux/, kernel/fake_key.c, init/main.c, Documentation/core-api/fake_key.rst). Write a short standalone Markdown tutorial on the fake_key mechanism for a competent C programmer who has not seen this code. Cover what a fake_key is, the enable/disable counted-edge rule, the early_boot_setup vs fake_key_init ordering, and where to read next in the tree. Save it to outputs/fake_key.md. Do not dump the tutorial only in chat.",
       "expected_output": "A short Markdown tutorial at outputs/fake_key.md grounded in the fixture sources and passing the checker",
       "files": ["evals/files/mini-kernel"],
       "expectations": [
         "Wrote outputs/fake_key.md rather than only a chat answer",
         "check-tutorial reports 0 errors against the mini-kernel tree",
+        "Uses the kernel-tutorials Pandoc heading, separator, and cross-reference format",
         "Mentions fake_key_enable, fake_key_disable, fake_key_init, and early_boot_setup",
-        "Grounds the init-ordering invariant in early_boot_setup (a Concretely: call site)",
-        "Has a Further reading in-tree section",
-        "Does not invent files that are not in this tree",
-        "In-tree file paths (e.g. Documentation/core-api/fake_key.rst) are elixir links",
-        "A given symbol is elixir-linked at most once per ##/### subsection"
+        "Grounds the init-ordering invariant in early_boot_setup",
+        "Provides the requested in-tree next reading without requiring a particular section title",
+        "Does not invent files or implementation details that are not in this tree",
+        "Links every prose occurrence of an in-tree path to Elixir",
+        "Uses a structure appropriate to the requested explanation rather than a fixed table of contents"
       ]
     },
     {
