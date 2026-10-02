@@ -1,37 +1,32 @@
 ---
 name: commit
-description: Create a Linux-kernel-style Git commit with a DCO sign-off. Use when the user asks to prepare or create a commit.
+description: Use when asked to prepare or create a Git commit, draft a commit message, or record changes with Linux kernel style and DCO sign-off.
 ---
 
-# Kernel-style commit
+# Kernel-Style Commit
 
-Inspect `git status`, `git diff HEAD`, and the five most recent non-merge subjects (`git log --no-merges -n 5 --format=%s`) before drafting anything. Stop if there are no tracked changes or a merge, rebase, or cherry-pick is in progress. Do not resolve, abort, or continue an in-progress operation unless the user explicitly asks. Capture the diff in `DIFF_TEMP` with `mktemp /tmp/commit-diff-XXXXXX.txt`; if it exceeds 100 KB, truncate it and warn.
+1. **Inspect**
+   - Run `git status`, `git diff --no-ext-diff`, `git diff --no-ext-diff --cached`, and `git log --no-merges -n 3` to examine changes and recent commit conventions.
+   - If there are no changes, inform the user and stop.
+   - Ignore untracked files unless referenced by tracked modifications. If an untracked file should be committed, warn the user and stop.
 
-Use one dedicated review-and-drafting pass from `DIFF_TEMP` and the five subjects. When delegation is available, pass them to one worker; otherwise perform it inline. Do not re-run `git diff` during the pass. Analyze the change's purpose, approach, subsystem, and recent subject style. For cross-file API or refactor changes, use Serena when connected (`get_symbols_overview`, `find_symbol`, and `find_referencing_symbols`). Using the pre-commit skill if available, identify only genuine warn/block issues: TODO/FIXME, `printk`/`pr_debug` or other debug output, commented-out code, obvious logic errors, and whitespace-only or merge artifacts. Return:
+2. **Draft Message**
+   - Analyze change purpose and subsystem/component prefix. For cross-file API or refactor context, use Serena if available (`get_symbols_overview`, `find_symbol`, `find_referencing_symbols`).
+   - **Subject**: ≤50 chars, imperative mood, no trailing period, matching repository prefix conventions (e.g., `component: description`).
+   - **Body Structure**: Separate from subject with a blank line. Wrap prose at 72 columns. Structure logically:
+     - *Problem & Motivation*: State the underlying problem motivating the change (bug, missing capability, unclear docs, workflow gap). Convince the reviewer why it is worth fixing in the opening paragraph.
+     - *Impact*: Describe user- or system-visible effects (errors, unexpected behavior, degraded performance, broken consumers). Help reviewers and downstream users understand why the change matters.
+     - *Technical Solution*: Explain in plain English what the change actually does in technical detail, allowing reviewers to verify implementation against intent.
+     - *Trade-offs & Metrics*: If claiming improvements (speed, memory, size, clarity), include concrete numbers or rationale. Disclose non-obvious costs or trade-offs (e.g., performance vs readability, backwards compatibility).
+   - **Constraints**: Do not fabricate metrics, error logs, issue references, AI attribution (`Co-authored-by`, `Made-with`), or trailers. `git commit -s` automatically adds `Signed-off-by`.
 
-```
-ISSUES:
-[warn/block findings, or None]
+3. **Request Approval**
+   - Display the complete commit message to the user and prompt for approval (e.g. via a menu or selection).
+   - If the user declines or requests modifications, do not commit.
 
-COMMIT_MESSAGE:
-[subject, blank line, and body; no trailers]
-
-TOOLS_USED:
-[Serena or None]
-```
-
-If delegation fails, complete those review and drafting steps inline from `DIFF_TEMP`. Report issues first and ask whether the user wants them fixed. If fixed, repeat inspection and review; otherwise proceed only with the user's explicit decision. Draft a focused, imperative, no-trailing-period subject (50 characters or fewer) matching the repository's subsystem prefix and recent style. Write 72-column prose that explains why and what changed, adding how only when non-obvious; scale its length to the change. Do not invent claims, AI attribution, or trailers.
-
-This skill bundles `scripts/dco-commit` beside this `SKILL.md`. Resolve its absolute installed path from the loaded skill, never from the target repository's `scripts/` directory. Never invoke `git commit`, `git commit -s`, use `--trailer`, or stage files directly from the agent shell — wrappers inject extra trailers. Do not write `Co-authored-by:`, `Co-Authored-by:`, or `Made-with:` in the message. The bundled helper stages tracked-file changes with `git add -u` and runs the commit internally.
-
-Obtain `name` with `git config user.name` and `email` with `git config user.email`. If either is empty or unavailable, stop and ask the user to configure it; never invent an identity. Create `MSG_TEMP` with `mktemp /tmp/commit-msg-XXXXXX.txt`. Its complete contents must be the subject and body followed by exactly one `Signed-off-by: <name> <email>` trailer. Add `Assisted-by: LLM` only when the user requests it.
-
-Show the complete message between `---` lines and ask for explicit approval before committing. On approval, run exactly one resolved helper invocation, with no intervening questions or tool calls:
-
-```
-"$SKILL_DIR/scripts/dco-commit" "$MSG_TEMP"
-```
-
-Here, `SKILL_DIR` is the absolute directory containing this installed `SKILL.md`; do not substitute a target-repository path. On failure, show the error, delete `DIFF_TEMP` and the temporary message, and do not retry unless asked. A hook may be bypassed with `--no-verify` only with explicit permission.
-
-After a successful helper invocation, inspect `git log -1 --format=%B` and `git rev-parse HEAD`. Verify the completed message has exactly one line equal to `Signed-off-by: <name> <email>` and no line beginning, case-insensitively, `Co-authored-by` or `Made-with`. If verification fails, report the message and stop; do not amend, strip, or retry. Otherwise report the hash and delete `DIFF_TEMP` and the temporary message. If approval is declined or cancelled, delete both temporary files and ask what the user wants to change.
+4. **Commit & Clean Up**
+   - Create a temporary file: `MSG_FILE=$(mktemp .commit-msg-XXXXXXXXXX.txt)`
+   - Write the approved commit message to `$MSG_FILE`.
+   - Run `git commit -as -F "$MSG_FILE"` to stage tracked changes and commit with sign-off.
+   - Remove the temporary file immediately (even on failure): `rm -f "$MSG_FILE"`.
+   - Do not perform any additional actions beyond these instructions (do not push or amend).
