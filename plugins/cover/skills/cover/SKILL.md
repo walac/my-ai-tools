@@ -1,30 +1,54 @@
 ---
 name: cover
-description: Generate a Linux-kernel-style patch-series cover letter from Git history. Use when the user asks for a cover letter or PATCH 0/N message.
+description: Use when asked to generate or draft a Linux-kernel-style patch-series cover letter (PATCH 0/N) from Git history or update an existing versioned cover letter.
 ---
 
-# Kernel patch-series cover letter
+# Kernel Patch-Series Cover Letter
 
-Accept an optional commit count, baseline branch, and output path. Reject a count combined with a baseline. Resolve the range in this order:
+1. **Resolve Range**
+   - Accept optional `<count>`, `<baseline>`, and output path. Reject if both `<count>` and `<baseline>` are given.
+   - Resolve commit count in order:
+     1. `<count>`: use specified count.
+     2. `<baseline>`: verify with `git rev-parse --verify <baseline>`, then count with `git rev-list --count <baseline>..HEAD`.
+     3. Neither: get upstream with `git rev-parse --abbrev-ref @{upstream}` and count with `git rev-list --count HEAD ^@{upstream}`. If upstream is missing or count is 0, prompt user for a count.
+   - Stop immediately if baseline is invalid or commit count is 0.
 
-1. Count: use that count.
-2. Baseline: verify it with `git rev-parse --verify <baseline>` and count `git rev-list --count <baseline>..HEAD`.
-3. Neither: obtain `@{upstream}` with `git rev-parse --abbrev-ref @{upstream}` and count `git rev-list --count HEAD ^@{upstream}`. If it is absent or the count is zero, ask for a count.
+2. **Inspect Commits**
+   - Run `git log -p -n <count>` (or `git log -p <baseline>..HEAD`). If diff exceeds 100 KB, warn the user.
+   - Analyze theme, problem, solution design, and commit relationships.
 
-Stop for an invalid baseline or an empty range. Create `COMMITS_TEMP` with `mktemp /tmp/cover-commits-XXXXXX.txt`; record `git log -n <count> -p --format=fuller` for a count, or `git log <baseline>..HEAD -p --format=fuller` for a baseline. If it exceeds 50 KB, retry without `-p`; if still over 100 KB, warn. Read this file for the letter; do not re-run `git log` while drafting.
+3. **Recover Prior Version (Versioned Series Only)**
+   - Trigger on explicit vN request or output filename matching `v<N>-*` (N > 1).
+   - If LKML tools (`lkml_get_user_series`, `lkml_search_patches`, `lkml_get_thread`, `lkml_get_raw`) are available:
+     - Get email: `git config user.email`.
+     - Locate prior cover (retry failed calls twice):
+       1. `lkml_get_user_series` by author email (v2: `[PATCH 0/X]`; vN: `v<N-1>`).
+       2. `lkml_search_patches` by topic and author.
+       3. If both fail, ask user for prior Message-ID; if none, warn and proceed as v1.
+     - With Message-ID: call `lkml_get_thread` to extract prior subject and all historical `Changes in v<X>:` sections verbatim. Call `lkml_get_raw` for each v<N-1> patch to compare against current commits.
+   - If LKML tools are unavailable: warn that lookup was skipped, preserve any user-supplied prior `Changes in v<X>:` sections verbatim, or draft as v1.
 
-For a versioned series (an explicit vN request, or output filename `v<N>-*` for N > 1), use the available LKML tools `lkml_get_user_series`, `lkml_search_patches`, `lkml_get_thread`, and `lkml_get_raw`. Get `git config user.email`, then look up the prior cover in this order: `lkml_get_user_series` by author email (for v2, unversioned `[PATCH 0/X]`; later versions, vN-1), then `lkml_search_patches` by topic and author. Retry each failed LKML call twice. If both lookups fail, ask for the prior Message-ID; if none is available, warn and write a first-round letter. Once a Message-ID is found or supplied, call `lkml_get_thread` on it, retain the prior subject description and every `Changes in v<X>:` section verbatim, and call `lkml_get_raw` for each vN-1 patch before comparing them with the current series. Preserve a supplied prior cover's earlier Changes sections when LKML tools are unavailable, and say lookup was skipped.
+4. **Draft Cover Letter**
+   - **Subject**: `[PATCH 0/<count>] <theme>` (unversioned) or `[PATCH v<N> 0/<count>] <prior subject verbatim>` (versioned).
+   - **Body**: 2–4 paragraphs, 72-column wrap:
+     - *Motivation*: problem and why it matters.
+     - *Approach*: high-level technical solution and how patches fit together.
+     - *Context/Testing (optional)*: test coverage, benchmarks, or next steps.
+   - **Constraints**:
+     - Narrative only: do NOT summarize patches individually or list commits.
+     - Do NOT fabricate metrics, issue IDs, rationale, reviewer feedback, or history.
+   - **Changelog (`Changes in v<N>:`)** (versioned only):
+     - List structural changes first (added/removed/split/squashed), then substantive code/bugfix changes (credit reviewers where supported).
+     - Skip whitespace and wording changes.
+     - Append all older `Changes in v<X>:` sections verbatim below.
 
-Use exactly one dedicated drafting pass from `COMMITS_TEMP`. When delegation is available, give that pass `COMMITS_TEMP`, the commit count, and all recovered version data; otherwise perform it inline. It must return:
+5. **Request Approval**
+   - Display the complete cover letter to the user and prompt for approval (e.g. via a menu or selection).
+   - If the user declines or requests modifications, iterate with the user to improve the text until he approves.
 
-```
-COVER_LETTER:
-[subject, blank line, body, and any Changes sections]
-
-TOOLS_USED:
-[LKML or None]
-```
-
-The letter subject is `[PATCH 0/<count>] <theme>`, or `[PATCH v<N> 0/<count>] <prior subject description>` when versioned. Follow with two to four 72-column prose paragraphs covering motivation, series-level approach, and testing/context; keep it high-level, with no per-patch summary. Do not invent metrics, issue IDs, rationale, reviewer feedback, or version history. For a verified later version, add only substantive `Changes in v<N>:` entries: structural changes first, then code or bugfix changes, crediting reviewers where supported. Skip whitespace-only and wording changes; append all older Changes sections verbatim. Check the subject and claims against `COMMITS_TEMP` before returning. If a delegated drafting pass fails, perform those analysis, drafting, and checks inline without re-running `git log`.
-
-Show the complete letter between `---` lines before writing. If no output path was given, ask whether terminal-only output is wanted; otherwise ask for a path. After confirmation, if the path is a `git format-patch` template, replace only `*** SUBJECT HERE ***` and `*** BLURB HERE ***`, preserving its diffstat and patch list. For any other requested path, overwrite it. Delete `COMMITS_TEMP` after writing, on failure, or on cancellation.
+6. **Review & Output**
+   - Display complete letter between `---` lines.
+   - If no output path was provided: ask whether terminal-only output is desired, or prompt for a path.
+   - After confirmation:
+     - If target is a `git format-patch` template (`*** SUBJECT HERE ***` / `*** BLURB HERE ***`): replace only those markers, keeping diffstat and patch list intact.
+     - Otherwise: write/overwrite file.
