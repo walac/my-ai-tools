@@ -8,8 +8,11 @@ This repository distributes the same plugin payload to multiple coding agents. `
 | Codex | `.agents/plugins/marketplace.json` | `.codex-plugin/plugin.json` |
 | Claude Code | `.claude-plugin/marketplace.json` | `.claude-plugin/plugin.json` |
 | Gemini CLI | Individual plugin directory | `gemini-extension.json` |
+| OpenCode | `skills` array in `opencode.json` | None (reads `skills/*/SKILL.md` directly) |
 
 Gemini CLI uses independently installed extensions rather than a repository-wide marketplace catalog. Each `plugins/<name>/` directory is an extension and contains its own manifest. Cursor-specific commands remain in `commands/`; portable workflows belong in `skills/`.
+
+OpenCode has no catalog or manifest, so there is nothing to register or keep in sync for it. Users add the clone's `plugins/` directory (or individual `plugins/<name>/skills` directories) to `skills` in `opencode.json`. OpenCode derives the skill ID from the directory path, so keep each skill directory name equal to its `name` frontmatter. Cursor `commands/` are not loaded.
 
 Keep the plugin `name`, `version`, and `description` identical across the four adapter manifests and the Cursor/Claude catalogs. Codex marketplace entries do not carry `description`; they still need matching `name` values.
 
@@ -43,11 +46,12 @@ Do not delete that key. After changing it, confirm a Claude install of those plu
 
 ## MCP config lockstep (`lkml-mcp`)
 
-`lkml-mcp` ships the same `uvx` server in three places. Keep them identical when changing the command, args, or package source:
+`lkml-mcp` ships the same `uvx` server in four places. Keep them identical (the OpenCode snippet merges command and args into one array) when changing the command, args, or package source:
 
 - `plugins/lkml-mcp/mcp.json` — Cursor
 - `plugins/lkml-mcp/.mcp.json` — Claude Code and Codex (`mcpServers: "./.mcp.json"`)
 - `plugins/lkml-mcp/gemini-extension.json` — inline `mcpServers`
+- `README.md` ("Install with OpenCode") — `mcp.lkml` (OpenCode 1.18.13) or `mcp.servers.lkml` (newer schema) with `type: "local"` and `command` as one array; documentation only, no file ships for OpenCode
 
 ## Codex `interface.defaultPrompt`
 
@@ -84,3 +88,13 @@ agent plugin marketplace add .
 ```
 
 Then install the desired plugin with the platform's plugin UI or CLI. For Gemini, link or install each desired `plugins/<name>` directory. The former `pal-skills` bundle is gone: unlink `./plugins/pal-skills` and link individual directories instead. Test external MCP integrations only after reviewing their configuration and having their required runtime installed.
+
+For OpenCode, add the local `plugins/` path to `skills` in a project `opencode.json` and list what it discovered. The `skills` shape depends on the OpenCode version (array in the current schema, `{ "paths": [...] }` in 1.18.13), so use a scratch config directory to avoid an unrelated invalid global config:
+
+```bash
+mkdir -p /tmp/oc && cd /tmp/oc && export XDG_CONFIG_HOME=/tmp/oc/xdg
+echo '{"skills":{"paths":["'"$OLDPWD"'/plugins"]}}' > opencode.json
+opencode debug skill | python3 -c 'import json,sys; [print(s["name"]) for s in json.load(sys.stdin)]'
+```
+
+Expect every `skills/<name>` in the repo plus OpenCode's built-in `customize-opencode`. A local, gitignored `*-workspace/` scratch directory also contains `SKILL.md` files and can shadow a real skill; ignore it or remove it before testing.

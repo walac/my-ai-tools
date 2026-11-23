@@ -1,6 +1,6 @@
 # my-ai-tools
 
-Multi-platform marketplace for agent skills, commands, plugins, and MCP servers. It supports Cursor, Codex, Claude Code, and Gemini CLI. The portable core is the Agent Skills layout (`skills/<name>/SKILL.md`); each platform has a small native manifest or catalog adapter.
+Multi-platform marketplace for agent skills, commands, plugins, and MCP servers. It supports Cursor, Codex, Claude Code, Gemini CLI, and OpenCode. The portable core is the Agent Skills layout (`skills/<name>/SKILL.md`); each platform has a small native manifest or catalog adapter.
 
 Hosted at [https://github.com/walac/my-ai-tools](https://github.com/walac/my-ai-tools).
 
@@ -14,8 +14,9 @@ Add the marketplace first, then install plugins by name. User-scope installs in 
 | Codex | Marketplace | `.agents/plugins/marketplace.json` |
 | Claude Code | Marketplace | `.claude-plugin/marketplace.json` |
 | Gemini CLI | Individual extensions | `plugins/<name>/gemini-extension.json` |
+| OpenCode | Skills directory in `opencode.json` (no marketplace) | `plugins/<name>/skills/` |
 
-See [platform support](docs/PLATFORM_SUPPORT.md) for validation and local-install commands. Gemini CLI does not use a repository-wide marketplace manifest; install or link the plugin directory you want.
+See [platform support](docs/PLATFORM_SUPPORT.md) for validation and local-install commands. Gemini CLI does not use a repository-wide marketplace manifest; install or link the plugin directory you want. OpenCode has no marketplace or plugin manifest either; it loads the portable `skills/` payload from directories listed in its config.
 
 ## Install with Codex
 
@@ -46,6 +47,43 @@ gemini extensions link ./plugins/codereview
 ```
 
 Use `gemini extensions validate ./plugins/codereview` before linking a modified extension.
+
+## Install with OpenCode
+
+OpenCode has no marketplace. It reads `SKILL.md` files natively from directories listed in the `skills` array of `opencode.json` ([skills docs](https://opencode.ai/docs/skills/)). Clone the repository and point OpenCode at it:
+
+```bash
+git clone https://github.com/walac/my-ai-tools.git ~/my-ai-tools
+```
+
+```jsonc
+// ~/.config/opencode/opencode.json (or a project opencode.json)
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": ["~/my-ai-tools/plugins"]
+}
+```
+
+OpenCode's config schema has changed between releases. The array form above matches the current published schema and docs. OpenCode 1.18.13 rejects it ("Expected object") and needs the older object form, `"skills": { "paths": ["~/my-ai-tools/plugins"] }`. If OpenCode reports an invalid configuration, check your version against <https://opencode.ai/config.json>. Restart OpenCode after editing the config.
+
+This loads the skills of every plugin. OpenCode scans `plugins/<name>/skills/<skill>/SKILL.md` recursively without extra configuration. To load only some skills, list individual `~/my-ai-tools/plugins/<name>/skills` directories instead. Skill IDs come from the directory path, which matches each skill's `name`. Update with `git pull`.
+
+Cursor `commands/` are not loaded; use the equivalent skill (`commit`, `cover`).
+
+`lkml-mcp` is not installed by the skills path. Add its server to `opencode.json` yourself (requires `uvx`). OpenCode 1.18.13 takes servers directly under `mcp`:
+
+```jsonc
+{
+  "mcp": {
+    "lkml": {
+      "type": "local",
+      "command": ["uvx", "--from", "git+https://github.com/zampierilucas/lkml-mcp", "lkml-mcp"]
+    }
+  }
+}
+```
+
+Newer schemas nest servers one level deeper (`mcp.servers.lkml`) and deprecate the flat form; see the [OpenCode MCP docs](https://opencode.ai/docs/mcp-servers/).
 
 ## Install with Cursor
 
@@ -212,3 +250,5 @@ Component folders are optional. Do not make the shared `SKILL.md` depend on a pl
 - [Cursor CLI](https://cursor.com/docs/cli/overview)
 - [Claude Code marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
 - [Gemini CLI extensions](https://geminicli.com/docs/extensions/reference/)
+- [OpenCode skills](https://opencode.ai/docs/skills/)
+- [OpenCode MCP servers](https://opencode.ai/docs/mcp-servers/)
